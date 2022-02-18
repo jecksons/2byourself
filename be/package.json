@@ -1,0 +1,24 @@
+{
+  "name": "2byourself",
+  "version": "1.0.0",
+  "description": "2byourself backend",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "author": "Jeckson Schwengber",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2",
+    "jsonwebtoken": "^8.5.1",
+    "mysql": "^2.18.1",
+    "promise": "^8.1.0",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "jest": "^27.4.7",
+    "nodemon": "^2.0.15"
+  }
+}

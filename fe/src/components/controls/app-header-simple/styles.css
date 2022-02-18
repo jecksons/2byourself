@@ -1,0 +1,33 @@
+input.product-search{
+   border: 0;
+   padding: 0.5rem 1rem;
+   border-radius: 20px;
+   min-width: 20rem;
+   outline: none;
+   transition: box-shadow 0.2s ease-in;
+}
+
+input.product-search:hover,
+input.product-search:focus{
+   box-shadow: 0 0 5px 2px var(--prim-4);
+}
+
+header.parent-app-header{
+   border-bottom: 3px solid var(--prim);
+   box-shadow: 0 2px 2px 0 #707070;
+}
+
+button.btn-shop-cart{   
+   display: flex;
+   gap: 0;
+}
+
+button.btn-shop-cart > label{
+   position: absolute;
+   top: 24px;
+   left: 50%;
+   transform: translateX(-50%);
+   color: #fff;
+   min-width: 17px;
+   font-weight: bold;
+}

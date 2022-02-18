@@ -1,0 +1,28 @@
+div.login-div-line::after{
+   content: " ";
+   border-bottom: 1px solid #EBEBEB;
+   width: 100%;
+   margin-top: -0.5rem;
+   position: relative;   
+}
+
+div.login-div-line > label{
+   z-index: 1;
+   background-color: var(--surface);
+   padding: 0 0.5rem;
+}
+
+div.login-further-info{
+   display: none;
+}
+
+div.login-further-info-show{
+   display: flex;
+}
+
+div.email-input-loading{
+   position: absolute;
+   top: 50%;
+   left: calc(100% - 1rem);
+   transform: translate(-50%, -50%);
+}

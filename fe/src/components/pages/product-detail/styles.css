@@ -1,0 +1,101 @@
+img.product-view{
+   max-height: 450px;
+   max-width: 400px;
+   -webkit-transition: -webkit-transform 0.5s ease; /* Safari and Chrome */
+   -moz-transition: -moz-transform 0.5s ease; /* Firefox */
+   -ms-transition: -ms-transform 0.5s ease; /* IE 9 */
+   -o-transition: -o-transform 0.5s ease; /* Opera */
+   transition: transform 0.5s ease;
+   z-index: 9999;
+   cursor: zoom-in;
+}
+
+
+img.img-flip,
+figure.img-flip img{
+   -webkit-transform:scaleX(-1) ; /* Safari and Chrome */
+   -moz-transform:scaleX(-1) ; /* Firefox */
+   -ms-transform:scaleX(-1) ; /* IE 9 */
+   -o-transform:scaleX(-1) ; /* Opera */
+    transform:scaleX(-1) ;
+}
+
+div.parent-img-product-small{
+   height: 50px;
+   width: 50px;   
+   display: flex;
+   flex-direction: column;
+   padding: 0.5rem;
+   align-items: center;
+   justify-content: center;   
+   border: 1px solid #f0f0f0;
+   border-radius: 6px;
+   cursor: pointer;   
+}
+
+div.parent-img-product-small > img{
+   height: 100%;
+}
+
+div.img-selected {
+   box-shadow: 0 4px 4px 0 #ebebeb;
+   border: 1px solid #d0d0d0;
+}
+
+label.prd-original-price{
+   text-decoration: line-through;
+   font-size: 1rem;
+   color: var(--grey-1);
+}
+
+:root{
+   --main-content-width: 50rem;
+}
+
+.main-content-width-pad{
+   width: calc(var(--main-content-width) - 2rem);
+}
+
+.main-content-width{
+   width: var(--main-content-width);
+   min-width: var(--main-content-width);
+}
+
+label.prd-price-discount{   
+   font-size: 1.5rem;
+   font-weight: bold;
+   color: var(--prim-4);
+}
+
+label.prd-discount{   
+   font-size: 0.75rem;
+   color: var(--prim-4);
+}
+
+button.btn-size-option,
+button.btn-size-option-selected{
+   border: 1px solid #E0E0E0;
+}
+
+button.btn-size-option-selected{
+   border: 1px solid #000;
+   text-decoration: underline;
+   font-weight: bold;
+}
+
+div.rating-bar{
+   background-color: #E3E3E3;   
+}
+
+div.rating-bar > div{
+   background-color: var(--prim);   
+   border-radius: 0 15px 15px 0;
+}
+
+@media only screen and (max-width: 900px) {
+
+   :root{
+      --main-content-width: auto;
+   }
+   
+}

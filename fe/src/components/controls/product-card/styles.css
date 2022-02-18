@@ -1,0 +1,21 @@
+.product-card-item{
+   width: 13rem;
+   height: 14rem;
+   min-width: 13rem;
+   max-width: 13rem;
+   max-height: 14rem;
+   min-height: 14rem;
+   text-decoration: none;
+   color: inherit;
+}
+
+.product-card-item img{
+   max-width: 11rem;
+   max-height: 150px;
+}
+
+label.discount-perc{
+   position: absolute;
+   top: 0;
+   left: 0;
+}

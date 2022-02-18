@@ -1,0 +1,26 @@
+section.body-product{
+   display: flex;
+   flex-direction: row;
+   margin-top: 1.5rem;
+   width: 100%;
+   flex: 1;
+   justify-content: center;
+   gap: 2rem;   
+}
+
+section.product-grid{
+   flex: 1;
+   gap: 1rem;
+   display: flex;
+   flex-direction: column;
+}
+
+ul.product-items{
+   display: flex;
+   flex-direction: row;
+   gap: 1.5rem;
+   flex-wrap: wrap;         
+}
+
+
+

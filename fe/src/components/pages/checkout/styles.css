@@ -1,0 +1,134 @@
+div.tab-header-checkout,
+div.tab-header-checkout-selected{
+   padding: 0.75rem 3rem;
+   background-color: var(--surface);
+   box-shadow: 0 0 2px 0 rgba(0,0,0, 0.25);  
+   letter-spacing: 2px;   
+   position: relative;
+   flex: 1;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+}
+
+
+
+div.tab-header-checkout-selected{
+   background-color: var(--prim-4);  
+   color: var(--prim-4-text);  
+   
+}
+
+
+div.step-before-end::after,
+div.step-before-end-sel::after{
+   position: absolute;
+   left: calc(100% - 5px);
+   top: 50%;
+   z-index: 1;
+   content: " ";
+   width: 8px;
+   height: 8px;   
+   margin-top: -4px;
+   background-color: var(--surface);
+   transform: rotate(45deg);
+   border: 1px solid transparent;
+   border-right-color: rgba(0,0,0, 0.10);  
+   border-top-color: rgba(0,0,0, 0.10);  
+   
+}
+
+div.step-before-end-sel::after{
+   background-color: var(--prim-4);
+   border-right-color: var(--prim-4);
+   border-top-color: var(--prim-4);
+}
+
+li.checkout-option-selected,
+li.checkout-option{
+   padding: 0.5rem 1rem;
+   border-radius: 10px;
+   background-color: #F8F8F8;
+   border: 1px solid #F8F8F8;
+}
+
+li.checkout-option:hover{
+   background-color: #efefef;
+}
+
+
+div.checkout-chk-item,
+div.checkout-chk-item-selected{
+   min-width: 14px;
+   max-width: 14px;
+   min-height: 14px;
+   max-height: 14px;
+   border-radius: 50%;
+   background-color: #fff;
+   border: 1px solid #c0c0c0;      
+   position: relative;   
+   box-sizing: content-box;
+}
+
+
+div.checkout-chk-item-selected::after{
+   content: " ";
+   width: 7px;
+   height: 7px;
+   position: absolute;
+   top: 50%;
+   left: 50%;
+   transform: translate(calc(-50%), -50%);
+   border-radius: 50%;
+   background-color: #000; 
+}
+
+section.checkout-main{
+   min-height: 24rem;
+   display: flex;
+   flex-direction: column;
+   min-width: 26rem;
+}
+
+
+
+
+div.animated-success {
+   display:flex;
+   flex-direction: row;
+   overflow:hidden;
+   white-space:nowrap;
+ }
+
+ div.ex-anim{
+    display: flex;
+    flex-direction: row;
+    overflow: hidden;
+    white-space: nowrap;
+ }
+
+ div.ex-anim > h1{
+   animation: slideIn 5s;
+}
+
+div.ex-anim > img{
+   opacity: 1;
+   animation: showUp 2s;
+}
+ 
+@keyframes slideIn {
+   0% { margin-left:-300px; }
+   20% { margin-left:-300px; }
+   35% { margin-left:0px; }
+   100% { margin-left:0px; }
+}
+
+@keyframes showUp {
+   0% { opacity: 0; }
+   90% {opacity: 0;}
+   100% { opacity: 1; }
+}
+
+ 
+ 
+ 
