@@ -52,11 +52,9 @@ label.prd-original-price{
    --main-content-width: 50rem;
 }
 
-.main-content-width-pad{
-   width: calc(var(--main-content-width) - 2rem);
-}
 
 .main-content-width{
+   box-sizing: border-box;
    width: var(--main-content-width);
    min-width: var(--main-content-width);
 }
@@ -77,6 +75,10 @@ button.btn-size-option-selected{
    border: 1px solid #E0E0E0;
 }
 
+figure.img-product-zoom{
+   width: 400px;
+}
+
 button.btn-size-option-selected{
    border: 1px solid #000;
    text-decoration: underline;
@@ -92,10 +94,73 @@ div.rating-bar > div{
    border-radius: 0 15px 15px 0;
 }
 
+div.product-main-info{
+   display: flex;
+   flex-direction: column;
+   gap: 1.5rem;
+   justify-content: flex-start;
+   align-items: flex-start;
+   padding: 0.5rem;
+   width: 20rem;
+   box-sizing: border-box;   
+}
+
+section.product-parent-info{
+   display: flex;
+   flex-direction: column;
+   gap: 1.5rem;
+   padding: 1.5rem;
+   box-sizing: border-box;
+}
+
+ol.last-visited-list{
+   display: flex;
+   flex-direction: row;
+   gap: 1rem;
+   width: 100%;
+   max-width: calc(100vw - 4rem);
+   padding: 0 0 1rem;
+   justify-content: flex-start;   
+}
+
 @media only screen and (max-width: 900px) {
 
    :root{
       --main-content-width: auto;
    }
    
+}
+
+@media only screen and (max-width: 840px) {
+
+   figure.img-product-zoom{
+      width: 300px;
+   }
+
+}
+
+@media only screen and (max-width: 600px) {
+
+   figure.img-product-zoom{
+      width: 200px;      
+   }
+
+   .main-content-width{
+      width: unset;
+      min-width: unset;
+   }
+
+   div.product-main-info{      
+      width: unset;      
+   }
+
+   section.product-parent-info{
+      padding: 1rem;
+   }
+
+   ol.last-visited-list{
+      gap: 0.5rem;
+   }
+   
+
 }

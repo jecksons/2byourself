@@ -129,6 +129,50 @@ div.ex-anim > img{
    100% { opacity: 1; }
 }
 
+
+div.parent-login-checkout{
+   flex: 1;
+}
+
  
+@media only screen and (max-width: 1000px) {
+   
+   section.checkout-main{
+      min-width: unset;
+      flex: 1;
+   }
+
+   div.tab-header-checkout {
+      display: none;
+   }
+}
  
+@media only screen and (max-width: 640px) {
+
+
+   section.checkout-main{
+      min-width: 70vw;
+      flex: 1;
+   }
+}
  
+
+@media only screen and (max-width: 500px) {
+
+   div.parent-login-checkout{
+      min-width: unset;
+      width: 100%;
+   }
+}
+
+@media only  screen and (max-width: 448px) {
+   div.success-sale-bottom{
+      flex-direction: column;
+      width: 100%;
+   }
+
+   div.success-sale-bottom > a {
+      width: 100%;      
+      box-sizing: border-box;
+   }
+}

@@ -56,6 +56,7 @@ function PageTrack({pageSize, rowTotal, rowOffset, onSelectOffset}) {
       rowOffset]);   
 
    const handleChangeSel = useCallback((option) => {
+      console.log('clicked');
       if (option) {
          onSelectOffset(option.value);
       }      
@@ -65,23 +66,22 @@ function PageTrack({pageSize, rowTotal, rowOffset, onSelectOffset}) {
       {
          selPage.prevPage ? 
             <button className={`btn-icon btn-no-shadow btn-pad-025`} onClick={() => handleChangeSel(selPage.prevPage)} > <MdArrowBackIosNew size={16} /> </button> : 
-            <div className='space-1-05'> </div>
+            <div className='width-3'> </div>
       } 
       <Select
          key={keyRender}
          options={pages}
          defaultValue={selPage.currPage}
          classNamePrefix='av-select'
+         isSearchable={false}
          onChange={(opt) => handleChangeSel(opt) }
       />
       {
          selPage.nextPage ? 
             <button className={`btn-icon btn-no-shadow btn-pad-025 `}  onClick={() => handleChangeSel(selPage.nextPage)}><MdArrowForwardIos size={16} /> </button> :
-            <div className='space-1-05'> </div>
-      } 
-      
+            <div className='width-3'> </div>
+      }       
    </div>
-
 }
 
 PageTrack.propTypes = {

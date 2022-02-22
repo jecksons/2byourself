@@ -12,7 +12,6 @@ button.btn-social-google{
    align-items: center;
    column-gap: 0.5rem;
    justify-content: center;   
-   min-width: 14rem;
    min-height: 2.5rem;
 }
 
@@ -47,4 +46,76 @@ div.container-img-cart-item{
    justify-content: center;
    width: 72px;   
    height: 72px;
+}
+
+
+div.av-select__control--is-focused,
+div.av-select-error__control--is-focused{
+   box-shadow: none;        
+   border-color: #ebebeb;    
+}
+
+div.av-select__control,
+div.av-select-error__control{
+   border: 1px solid #ebebeb;
+   border-radius: 0;    
+   color: var(--prim-text);
+   font-size: 0.75rem;    
+}
+
+div.css-qc6sy-singleValue{
+   color: var(--prim-text);
+}
+
+
+div.av-select__control:hover,
+div.av-select__control--is-focused:hover,
+div.av-select-error__control:hover,
+div.av-select-error__control--is-focused:hover{
+   border: 1px solid #707070;    
+}
+
+div.av-select__control--is-focused,
+div.av-select-error__control--is-focused{    
+   border: 1px solid #707070;
+}
+
+div.av-select__option{   
+   font-size: 0.75rem;
+}
+
+div.av-select__option--is-focused,
+div.av-select-error__option--is-focused{
+   background-color: #e0e0e0;
+}
+
+div.av-select__option--is-selected,
+div.av-select-error__option--is-selected{
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+div.av-select__menu{
+   border-radius: 0 0 10px 10px;
+   padding: 0 0 0.25rem;
+   margin-top: -2px;
+   box-shadow: 0 1px 3px 1px rgba(0, 0 ,0,0.25);
+}
+
+
+
+div.overlay-dialog{
+   position: fixed;
+   inset: 0px;
+   background-color: rgb(56, 56, 56, 0.7);    
+}
+
+
+div.dialog-content{
+   left: 50%;
+   top: 50%;
+   position: absolute;
+   width: fit-content;        
+   transform: translate(-50%, -50%);    
+   outline: 0;
 }

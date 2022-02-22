@@ -21,7 +21,61 @@ section.footer-contact-info{
    color: #000;
 }
 
+
+div.footer-info-banner{
+   display: flex;
+   flex-direction: row;
+   text-align: center;
+   justify-content: center;
+   align-items: center;
+   gap: 5rem;
+}
+
 div.row-contact{
    flex: 1;
    align-items: flex-start;
+   justify-content: space-between;
+   min-width: 70vw;
+   gap: 2rem;
+   flex-wrap: wrap;
+   white-space: nowrap;
+}
+
+strong.info-sample-site{
+   font-weight: bold;
+   text-align: center;
+   padding: 0 1rem;
+}
+
+@media only screen and (max-width: 1200px) {
+
+   div.footer-info-banner{
+      gap: 1rem;
+   }
+
+   div.row-contact{
+      min-width: 90vw;
+   }
+
+}
+
+
+@media only screen and (max-width: 600px) {
+
+   div.footer-info-banner{
+      gap: 0;
+      flex-direction: column;      
+   }
+
+   div.row-contact{
+      min-width: unset;
+      justify-content: center;
+   }
+
+   footer.app-footer{
+      padding-top: 1rem;
+      margin-top: 2rem;
+      gap: 2rem;
+   }
+
 }

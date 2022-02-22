@@ -11,7 +11,7 @@ function ProductCard({product}) {
       <div className="flex-1 width-100">
          <div className="col just-center pos-relative width-100">
             {(product.discount > 0) && <label className="discount-perc">{product.discount.toFixed(0)}% Off</label>}
-            <img src={`${api.defaults.baseURL}${product.image}`} alt='product' />
+            <img src={`${api.defaults.baseURL}${product.image}`} alt='product'  className='product-card-img' />
          </div>
       </div>
       <div className="col-05 align-start width-100" >
@@ -26,14 +26,16 @@ function ProductCard({product}) {
 }
 
 function ProductCardLoading() {
-   return <article className="card-anim product-card-item " >            
-         <ContentLoader viewBox='0 0 330 356'>
-            <rect x="90" y="20" rx="5" ry="5" width="150" height="200" />
-            <rect x="0" y="270" rx="5" ry="5" width="90" height="16" />
-            <rect x="0" y="300" rx="5" ry="5" width="310" height="16" />
-            <rect x="75" y="330" rx="5" ry="5" width="150" height="16" />
-         </ContentLoader>
-   </article>
+   return (
+      <article className="card-anim product-card-item " >            
+         <ContentLoader viewBox='0 0 330 356'   >
+               <rect x="90" y="20" rx="5" ry="5" width="150" height="200" />
+               <rect x="0" y="270" rx="5" ry="5" width="90" height="16" />
+               <rect x="0" y="300" rx="5" ry="5" width="310" height="16" />
+               <rect x="75" y="330" rx="5" ry="5" width="150" height="16" />
+         </ContentLoader>         
+      </article>
+   )
 }
 
 function ProductCardId({productId}) {
@@ -47,8 +49,7 @@ function ProductCardId({productId}) {
             const ret = await ProductController.getProdByIds([productId]);
             if (ret.data.results.length > 0) {
                setProdData(ret.data.results[0]);
-            }
-            
+            }            
          } catch (err) {
             if (!api.isCancel(err)) {
                console.log(err);
@@ -57,7 +58,7 @@ function ProductCardId({productId}) {
       }
       fetchPrd();
       return () => cancelToken.cancel();
-   }, [productId])
+   }, [productId]);
 
    return prodData ? <ProductCard  product={prodData}  /> : <ProductCardLoading />
 }

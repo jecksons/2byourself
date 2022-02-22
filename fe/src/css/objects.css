@@ -132,7 +132,25 @@
    border-bottom: 1px solid var(--prim-text);
 }
 
+.btn-round-dismissible{
+   background-color: #fafafa;
+   padding: 0.5rem 1rem;   
+   border-radius: 20px;
+   font-size: 0.75rem;
+   box-shadow: 0 0 4px 0 #707070;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   gap: 0.25rem;
+}
 
+.btn-round-dismissible:hover{
+   box-shadow: 0 0 4px 0 var(--prim-2);
+}
+
+.btn-icon-circle.btn-disabled{
+   border-radius: 50%;
+}
 
 .btn-icon-circle{
    display: flex;
@@ -290,6 +308,14 @@
    min-width: 12rem;
 }
 
+.min-width-16{
+   min-width: 16rem;
+}
+
+.min-width-17{
+   min-width: 17rem;
+}
+
 .min-width-18{
    min-width: 18rem;
 }
@@ -405,6 +431,14 @@
    overflow-y: hidden;
    -ms-overflow-style: none;  /* IE and Edge */
    scrollbar-width: none;  /* Firefox */
+}
+
+.scroll-auto{
+   overflow: auto;
+}
+
+.max-height-90vh{
+   max-height: 90vh;
 }
 
 .scroll-hidden::-webkit-scrollbar{
@@ -625,6 +659,10 @@
    background-color: var(--grey-2);   
 }
 
+.back-surface{
+   background-color: var(--surface);   
+}
+
 .color-prim{
    color: var(--prim);
 }
@@ -692,4 +730,8 @@
 
 .underline-hover:hover{
    text-decoration: underline;   
+}
+
+.width-3{
+   width: 3rem;
 }
