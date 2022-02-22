@@ -183,16 +183,16 @@ function LoginControl({onNext}) {
 
 
    return (
-      <div className="col-1 width-100-1 pad-1 just-start" >
-         <form className="col-1 align-start ">            
+      <div className="col-1 width-100 border-box pad-1 just-start" >
+         <form className="col-1 align-start width-100 ">            
             <div className="col-05 align-start width-100">
                <label className="font-75">Email</label>
-               <div className="pos-relative">
+               <div className="pos-relative width-100  ">
                   <input 
                      placeholder="example@example.com" 
                      name="email" 
                      autoFocus
-                     className={`${userInfo.email.state === FF_INVALID ? 'input-error' : ''} min-width-18`}
+                     className={`${userInfo.email.state === FF_INVALID ? 'input-error' : ''} width-100 border-box `}
                      onChange={(e) => handleUserInfo(e.target)  } 
                      value={userInfo.email.value} />           
                   {userData.state === SS_LOADING && 
@@ -200,21 +200,21 @@ function LoginControl({onNext}) {
                   }                  
                </div>               
             </div>            
-            <div className={`col-1 align-start login-further-info${(userEmail !== '' && userData.state === SS_LOADED && !userData.user) ? '-show' : '' }`}>
-               <div className="col-05 align-start">
+            <div className={`col-1 align-start width-100 login-further-info${(userEmail !== '' && userData.state === SS_LOADED && !userData.user) ? '-show' : '' }`} >
+               <div className="col-05 align-start width-100">
                   <label className="font-75">First Name</label>
                   <input 
                      name="firstName" 
-                     className={`${userInfo.firstName.state === FF_INVALID ? 'input-error' : ''} min-width-18`}
+                     className={`${userInfo.firstName.state === FF_INVALID ? 'input-error' : ''} width-100 border-box `}
                      onChange={(e) => handleUserInfo(e.target)  } 
                      value={userInfo.firstName.value} />
                   <ItemFormError message={userInfo.firstName.state === FF_INVALID ? 'First Name is required!' : ''} />                  
                </div>
-               <div className="col-05 align-start">
+               <div className="col-05 align-start width-100">
                   <label className="font-75">Last Name</label>
                   <input  
                      name="lastName" 
-                     className={`${userInfo.lastName.state === FF_INVALID ? 'input-error' : ''} min-width-18`}
+                     className={`${userInfo.lastName.state === FF_INVALID ? 'input-error' : ''} width-100 border-box `}
                      onChange={(e) => handleUserInfo(e.target)  } 
                      value={userInfo.lastName.value} />
                   <ItemFormError message={userInfo.lastName.state === FF_INVALID ? 'Last Name is required!' : ''} />                  

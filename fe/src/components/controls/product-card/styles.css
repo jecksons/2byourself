@@ -19,3 +19,24 @@ label.discount-perc{
    top: 0;
    left: 0;
 }
+
+
+@media only screen and (max-width: 600px) {
+   .product-card-item{
+      width: unset;      
+      min-width: unset;
+      max-width: unset;
+      flex: 1;      
+   }   
+}
+
+
+@media only screen and (max-width: 500px) {
+   img.product-card-img{
+      max-height: 112px;
+      max-width: 112px;
+   }
+}
+
+
+

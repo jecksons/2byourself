@@ -5,7 +5,7 @@ import checkSuccess from '../../../media/check.png';
 import api from "../../../services/api";
 import utils from "../../../services/utils";
 import CartContext from "../../../store/cart-context";
-import AppHeaderSimple from "../../controls/app-header-simple";
+import AppHeader from "../../controls/app-header";
 import NotFoundSurface from "../../controls/not-found-surface";
 import OrderSummary from "../../controls/order-summary";
 import {ErrorToast} from '../../controls/toast';
@@ -193,45 +193,47 @@ function CheckoutPage({idCart, cartValue, onSelectFreightValue, onSuccessSale}) 
       }           
    }, [selTab, setSelTab, onSuccessSale, idCart, selDelivery, selPayment]);
    
-   return <section className="checkout-main">
-      <header className="row">
-         {
-            CheckoutStrTabs.map((itm, idx, ar) => (userIsLogged && idx === 0) ? null :  
-               <TabPageItem 
-                  key={idx}
-                  caption={CheckoutStrTabs[idx] }  
-                  selected={selTab === idx} 
-                  isLast={idx === ar.length-1} />  )
-         }         
-      </header>
-      <div className="card-square col flex-1 align-center just-center" >
-         {  
+   return (
+      <section className="checkout-main">
+         <header className="row flex-wrap">
             {
-               0: (
-                     <div >
-                        <LoginControl onNext={() => handlePageIndex(1)}  />                        
-                     </div>
-                  ),
-               1: <CheckoutSelectOption 
-                     title={'Please confirm the delivery option'} 
-                     options={deliveryOptions} 
-                     onReqPageChange={handlePageIndex} 
-                     onSelect={handleSelDelivery} 
-                     value={selDelivery} 
-                     childRender={DeliveryItem}  />,
-               2: <CheckoutSelectOption 
-                     title={'Please confirm the payment method'} 
-                     options={paymentOptions} 
-                     onReqPageChange={handlePageIndex} 
-                     value={selPayment}
-                     onSelect={setSelPayment}
-                     nextOptionCaption='Finish'
-                     processingStatus={saleStatus === SS_LOADING}
-                     childRender={PaymentItem} />
-            }[selTab]            
-         }         
-      </div>
-   </section>
+               CheckoutStrTabs.map((itm, idx, ar) => (userIsLogged && idx === 0) ? null :  
+                  <TabPageItem 
+                     key={idx}
+                     caption={CheckoutStrTabs[idx] }  
+                     selected={selTab === idx} 
+                     isLast={idx === ar.length-1} />  )
+            }         
+         </header>
+         <div className="card-square col flex-1 align-center just-center" >
+            {  
+               {
+                  0: (
+                        <div className="parent-login-checkout" >
+                           <LoginControl onNext={() => handlePageIndex(1)}  />                        
+                        </div>
+                     ),
+                  1: <CheckoutSelectOption 
+                        title={'Please confirm the delivery option'} 
+                        options={deliveryOptions} 
+                        onReqPageChange={handlePageIndex} 
+                        onSelect={handleSelDelivery} 
+                        value={selDelivery} 
+                        childRender={DeliveryItem}  />,
+                  2: <CheckoutSelectOption 
+                        title={'Please confirm the payment method'} 
+                        options={paymentOptions} 
+                        onReqPageChange={handlePageIndex} 
+                        value={selPayment}
+                        onSelect={setSelPayment}
+                        nextOptionCaption='Finish'
+                        processingStatus={saleStatus === SS_LOADING}
+                        childRender={PaymentItem} />
+               }[selTab]            
+            }         
+         </div>
+      </section>
+   )
 
 }
 
@@ -240,7 +242,7 @@ function SuccessSale(){
       <div className="col-1 align-start">
          <div>
             <div className="row-05 just-start ex-anim">
-               <h1 >Your order was confirmed</h1>
+               <h1  style={{whiteSpace: 'break-spaces'}}>Your order was confirmed</h1>
                <img height={32} width={32} src={checkSuccess} alt="success sale"/>            
             </div>         
          </div>               
@@ -248,7 +250,7 @@ function SuccessSale(){
             You can follow your orders on the “My Orders” option menu, and on every stage until the final delivery, you will be aware of the steps through your email.
          </p>
       </div>
-      <div className="row gap-025 just-end width-100">
+      <div className="row gap-025 just-end width-100 flex-wrap success-sale-bottom">
          <a href="/my-orders"  className="btn-action-secundary btn-action-secundary-big">My Orders</a>
          <a href="/"  className="btn-action-primary">Continue Shopping</a>
       </div>      
@@ -303,7 +305,7 @@ export default function Checkout(props) {
    }, [setShowSuccessSale, setCartInfo]);
      
    return <main className="col background height-full just-start" >
-      <AppHeaderSimple />
+      <AppHeader withoutMenu />
       <div className="col flex-1 just-start gap-1 pad-105" >      
          <section className="col gap-105">
             {screenState === SS_LOADING ? <SurfaceLoading /> :
@@ -314,7 +316,7 @@ export default function Checkout(props) {
                            (
                               showSuccessSale ? 
                                  <SuccessSale /> : 
-                                 <div className="row-1  align-start ">         
+                                 <div className="row-1  align-start flex-wrap ">         
                                     <CheckoutPage  
                                        idCart={idCart} 
                                        cartValue={cartData ? cartData.total_value : 0}  

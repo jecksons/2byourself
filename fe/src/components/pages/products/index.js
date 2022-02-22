@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useReducer, useState } from "react";
 import { useSearchParams } from "react-router-dom";
-import {AiOutlinePlus, AiOutlineMinus, AiOutlineMinusCircle} from 'react-icons/ai';
+import {AiOutlinePlus, AiOutlineMinus, AiOutlineMinusCircle, AiOutlineClose} from 'react-icons/ai';
 import {BiCheckboxChecked, BiCheckbox} from 'react-icons/bi';
+import {GoSettings} from 'react-icons/go';
+import Modal from 'react-modal';
 
 import api from '../../../services/api';
 import PageTrack from '../../controls/page-track';
@@ -68,13 +70,73 @@ function FilterItem({filter, onChangeSelection, selItems}) {
 
    const [expanded, setExpanded]  = useState(false);
 
-   return <li className="width-100">
-      <button className="btn-section" onClick={() => setExpanded(p => !p)}>{filter.description} {expanded ? <AiOutlineMinus size={16}/> : <AiOutlinePlus size={16}/>}</button>      
-      {filter.filterType === 'items' ? 
-               <FilterItemSelect  filterItem={filter} show={expanded} onChangeSelection={onChangeSelection} selItems={selItems} /> : 
-               null
-      }
-   </li>
+   return (
+      <li className="width-100">
+         <button 
+            className="btn-section" 
+            onClick={() => setExpanded(p => !p)}>{filter.description} {expanded ? <AiOutlineMinus size={16}/> : <AiOutlinePlus size={16}/>}
+         </button>      
+            {filter.filterType === 'items' ? 
+                  <FilterItemSelect  filterItem={filter} show={expanded} onChangeSelection={onChangeSelection} selItems={selItems} /> : 
+                  null
+         }
+      </li>
+   )
+}
+
+function FiltersModal({filters, onChangeSelection, selFilters, show, onRequestClose}) {
+
+   return show && (
+      <Modal 
+         className={'dialog-content'}
+         overlayClassName={'overlay-dialog'}
+         isOpen={true}
+         onRequestClose={onRequestClose}
+         >
+         <div className="col-05 card-square max-height-90vh min-width-16">
+            <button onClick={onRequestClose} className="product-filters-close" ><AiOutlineClose size={12}/></button>
+            <label>Filters</label>
+            <ul className="col-05 align-start width-100 scroll-auto">
+               {filters.map((itm) => <FilterItem key={itm.id} filter={itm} onChangeSelection={onChangeSelection} selItems={selFilters} /> )}
+            </ul>                     
+         </div>
+      </Modal>         
+   );
+
+}
+
+function FiltersSmall({filters, onChangeSelection, selFilters, onDismiss}) {
+
+   const [showingModal, setShowingModal] = useState(false);
+
+   return (
+      <section className="col-05 align-start width-100 product-filters-small" >
+         <div className="row-05">
+            <button className="btn-action-secundary" onClick={() => setShowingModal(true)}> 
+               <GoSettings size={16} color='#000'/>
+            Filters</button>
+         </div>
+         <ul className="row-05 flex-wrap just-start">
+            {
+               (selFilters ?? []).map((itm) => <button 
+               key={itm.filter + itm.id.toString()}
+                  className="btn btn-round-dismissible" 
+                  onClick={() => onDismiss(itm)}>
+                     {itm.description}
+                     <AiOutlineClose size={12}/>
+               </button>)
+            }
+         </ul>
+         <FiltersModal  
+            filters={filters} 
+            onChangeSelection={onChangeSelection} 
+            selFilters={selFilters} 
+            show={showingModal}
+            onRequestClose={() => setShowingModal(false)}
+            />      
+      </section>
+   );
+
 }
 
 
@@ -226,7 +288,6 @@ export default function Products(props){
          filterParams.splice(filterParams.indexOf(filterOffset), 1);
       }      
       const filterStr = getFilterStr(filterParams);
-      console.log('effect ' + filterStr + ' - ' + offsetValue);
       const cancelToken = api.getCancelToken();
       const fetchPrd = async () => {
          try {            
@@ -260,7 +321,6 @@ export default function Products(props){
       setProdOffset(offsetValue);
       return () => cancelToken.cancel();
    }, [searchParams]);
-   
 
    const onChangeFilters = useCallback((action) => {
       let parFilters = processFiltersFromParams(searchParams);
@@ -284,41 +344,50 @@ export default function Products(props){
       }
    }, [onChangeFilters])
 
-   return <AppMainContainer>
+   return (
+      <AppMainContainer>
          <section className="body-product">
-         <section className="card-square width-12 col-1 align-start just-start">
-            <label className="font-bold">Filter By</label>
-            {
-               selFilters.length > 0 &&
-                  <div className="col-05 width-100">
-                     <ul className="width-100">
-                        {selFilters.map((itm) => <DismissibleFilter key={itm.filter + itm.id.toString()}  filter={itm} onDismiss={onDismissFilter}  />)}                     
-                     </ul>
-                     <button className="btn-link font-75" onClick={() => onChangeFilters({type: 'clear'})}>Clear All</button>
-                  </div>
-            }
-            <ul className="col-05 align-start width-100">
-               {filters.map((itm) => <FilterItem key={itm.id} filter={itm} onChangeSelection={onChangeFilters} selItems={selFilters} /> )}
-            </ul>                     
-         </section>
-         <section className="product-grid">
-            <header className="row">
-               <h2 className="font-105 font-bold">{productsTitle}</h2>
-               <PageTrack pageSize={ProdPageSize} rowOffset={prodOffset} onSelectOffset={onChangeOffset} rowTotal={prodMetadata.total} />               
-            </header>            
-            <ul className="product-items">
+            <section className="card-square width-12 col-1 align-start just-start product-filter-main">
+               <label className="font-bold">Filter By</label>
                {
-                  productLoad === PL_LOADING ? 
-                     ( Array.from('123').map((itm) => <ProductCardLoading key={itm} /> )) :
-                     (
-                        productLoad === PL_ERROR ? 
-                           <NotFoundSurface title={errorMessage.title}  message={errorMessage.message} /> :
-                           products.map((itm) => <ProductCard key={itm.id} product={itm} /> )
-                     )
-               }                             
-            </ul>
+                  selFilters.length > 0 &&
+                     <div className="col-05 width-100">
+                        <ul className="width-100">
+                           {selFilters.map((itm) => <DismissibleFilter key={itm.filter + itm.id.toString()}  filter={itm} onDismiss={onDismissFilter}  />)}                     
+                        </ul>
+                        <button className="btn-link font-75" onClick={() => onChangeFilters({type: 'clear'})}>Clear All</button>
+                     </div>
+               }
+               <ul className="col-05 align-start width-100">
+                  {filters.map((itm) => <FilterItem key={itm.id} filter={itm} onChangeSelection={onChangeFilters} selItems={selFilters} /> )}
+               </ul>                     
+            </section>
+            <section className="product-grid">
+               <header className="row">               
+                  <h2 className="font-105 font-bold">{productsTitle}</h2>                  
+               </header>            
+               <FiltersSmall 
+                  filters={filters} 
+                  onChangeSelection={onChangeFilters} 
+                  onDismiss={onDismissFilter}
+                  selFilters={selFilters}  />
+               <ul className="product-items">
+                  {
+                     productLoad === PL_LOADING ? 
+                        ( Array.from('123').map((itm) => <ProductCardLoading key={itm} /> )) :
+                        (
+                           productLoad === PL_ERROR ? 
+                              <NotFoundSurface title={errorMessage.title}  message={errorMessage.message} /> :
+                              products.map((itm) => <ProductCard key={itm.id} product={itm} /> ) 
+                        )
+                  }                             
+               </ul>
+               <footer className="row just-end" >
+                  <PageTrack pageSize={ProdPageSize} rowOffset={prodOffset} onSelectOffset={onChangeOffset} rowTotal={prodMetadata.total} />                  
+               </footer>
+            </section>
          </section>
-      </section>;
-   </AppMainContainer>
+      </AppMainContainer>
+   )
 
 }

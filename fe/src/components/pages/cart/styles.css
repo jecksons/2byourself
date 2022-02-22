@@ -1,0 +1,13 @@
+
+
+@media only screen and (max-width: 600px) {
+    li.card-cart-item{
+        flex-wrap: wrap;
+    }
+
+    div.product-item-amount{
+        align-items: center;
+        flex: 1;
+    }
+
+}

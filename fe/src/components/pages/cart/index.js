@@ -4,7 +4,6 @@ import {BsHandbag} from 'react-icons/bs';
 import api from "../../../services/api";
 import utils from "../../../services/utils";
 import CartContext from "../../../store/cart-context";
-import AppHeader from "../../controls/app-header";
 import NotFoundSurface from "../../controls/not-found-surface";
 import OrderSummary from "../../controls/order-summary";
 import QuantityEdit from "../../controls/quantity-edit";
@@ -40,58 +39,60 @@ function CartItemEditable({item, onUpdateAction}) {
       onUpdateAction({type: 'remove', id: item.id}, onChangeRejected);
    }, [onUpdateAction, item.id, onChangeRejected]);
    
-   return <li className="row-1 pad-1 align-start card-square width-100-1">
-      <div className="row-1 just-start">
-         <div className="container-img-cart-item">
-            <img src={`${api.defaults.baseURL}${item.image}`} style={{maxWidth: 72, maxHeight: 72}} alt={item.description} />      
-         </div>         
-         <div className="col-05 align-start">
-            <label className="font-bold font-75 color-grey">{item.brand}</label>
-            <label>{item.description}</label>
-            <label className="font-75">Size: {item.size}</label>
-            {
-               item.discount > 0 ? 
-                  <div className="row-05 align-start">
-                     <label className="font-bold font-75 color-grey font-strike" >USD {item.price.toFixed(2)}</label>
-                     <label className="font-bold">USD {utils.roundTo(item.total_value / item.quantity, 2).toFixed(2)}</label>
-                  </div> : 
-                  <label className="font-bold">USD {item.price.toFixed(2)}</label>
-            }            
-         </div>
-      </div>      
-      <div className="row align-start gap-105">
-         <div className="col-05">
-            <label className="font-75">Quantity</label>
-            <QuantityEdit quantity={quantity} onChangeQuantity={handleQuantitySet} />
-            <div className="min-height-2 row align-center just-center">
+   return (
+      <li className="row-1 pad-1 align-start card-square width-100 border-box card-cart-item">
+         <div className="row-1 just-start">
+            <div className="container-img-cart-item">
+               <img src={`${api.defaults.baseURL}${item.image}`} style={{maxWidth: 72, maxHeight: 72}} alt={item.description} />      
+            </div>         
+            <div className="col-05 align-start min-width-8 ">
+               <label className="font-bold font-75 color-grey">{item.brand}</label>
+               <label>{item.description}</label>
+               <label className="font-75">Size: {item.size}</label>
                {
-                  updateState.remove ? 
-                     <SurfaceLoading size={16} /> : 
-                     <button className="btn link-small" onClick={handleRemoveItem}>Remove</button>
+                  item.discount > 0 ? 
+                     <div className="row-05 align-start">
+                        <label className="font-bold font-75 color-grey font-strike" >USD {item.price.toFixed(2)}</label>
+                        <label className="font-bold">USD {utils.roundTo(item.total_value / item.quantity, 2).toFixed(2)}</label>
+                     </div> : 
+                     <label className="font-bold">USD {item.price.toFixed(2)}</label>
                }            
-            </div>            
+            </div>
+         </div>      
+         <div className="row align-start gap-105 product-item-amount ">
+            <div className="col-05">
+               <label className="font-75">Quantity</label>
+               <QuantityEdit quantity={quantity} onChangeQuantity={handleQuantitySet} />
+               <div className="min-height-2 row align-center just-center">
+                  {
+                     updateState.remove ? 
+                        <SurfaceLoading size={16} /> : 
+                        <button className="btn link-small" onClick={handleRemoveItem}>Remove</button>
+                  }            
+               </div>            
+            </div>
+            <div className="col-05 align-end">
+               <label className="font-bold">Total</label>
+               <div className="row min-width-4 align-center just-end">
+                  {
+                     updateState.quantity ? 
+                        <div><SurfaceLoading size={16}/> </div> : 
+                        <div className="col-05 align-end">
+                           <label className="font-bold">{item.total_value.toFixed(2)}</label>         
+                           {
+                              item.discount > 0 && 
+                                 <div className="col gap-025 align-end">
+                                    <label className="color-prim font-75 font-bold"> - ${item.discount.toFixed(2)}</label>                        
+                                    <label className="color-prim font-75 font-bold">{ utils.roundTo(item.discount / (item.quantity * item.price) * 100, 0).toFixed(0)}% OFF</label>                        
+                                 </div>
+                           }                        
+                        </div>                     
+                  }            
+               </div>            
+            </div>
          </div>
-         <div className="col-05 align-end">
-            <label className="font-bold">Total</label>
-            <div className="row min-width-4 align-center just-end">
-               {
-                  updateState.quantity ? 
-                     <div><SurfaceLoading size={16}/> </div> : 
-                     <div className="col-05 align-end">
-                        <label className="font-bold">{item.total_value.toFixed(2)}</label>         
-                        {
-                           item.discount > 0 && 
-                              <div className="col gap-025 align-end">
-                                 <label className="color-prim font-75 font-bold"> - ${item.discount.toFixed(2)}</label>                        
-                                 <label className="color-prim font-75 font-bold">{ utils.roundTo(item.discount / (item.quantity * item.price) * 100, 0).toFixed(0)}% OFF</label>                        
-                              </div>
-                        }                        
-                     </div>                     
-               }            
-            </div>            
-         </div>
-      </div>
-   </li>
+      </li>
+   )
 }
 
 export default function Cart(props) {
@@ -164,12 +165,12 @@ export default function Cart(props) {
             onReject();
          });
       }
-   }, [cartId]);
+   }, [cartId, setCartInfo]);
    
 
    return <AppMainContainer>
       <div className="col flex-1 just-start gap-1 pad-105" >      
-         <div className="row-05  just-start width-100 border-bottom-grey pad-05 color-prim-4 ">
+         <div className="row-05  just-start width-100 border-bottom-grey pad-1-0 color-prim-4 border-box ">
             <BsHandbag size={24} />
             <h1 className="color-prim-4" >Shopping Bag</h1>            
          </div>
@@ -179,11 +180,11 @@ export default function Cart(props) {
                   screenState === SS_ERROR ? <NotFoundSurface title={errorMessage.title} message={errorMessage.message} /> : 
                      (
                         screenState === SS_LOADED &&                        
-                           <div className="row gap-105 align-start ">
-                              <ol className="col-05 width-100 ">
+                           <div className="row gap-105 align-start flex-wrap ">
+                              <ol className="col-05 flex-1 ">
                                  {cartData.items.map((itm) => <CartItemEditable key={itm.id + (itm.total_value / 100)}  item={itm}  onUpdateAction={handleUpdateCartItem} /> )}
                               </ol> 
-                              <OrderSummary cartInfo={cartData} />
+                              <OrderSummary cartInfo={cartData} />                           
                            </div>
                      )
                )            
@@ -193,3 +194,5 @@ export default function Cart(props) {
    </AppMainContainer>
 
 }
+
+// 

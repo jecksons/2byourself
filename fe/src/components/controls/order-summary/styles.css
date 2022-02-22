@@ -1,0 +1,49 @@
+
+div.order-summary-total-container{
+    display: flex;
+    flex-direction: column;
+}
+
+@media only screen and (max-width: 768px) {
+ 
+    div.order-summary-total-container{
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        flex-direction: row;
+        box-shadow: 0 0 2px 0 #707070;
+    }
+}
+
+
+@media only screen and (max-width: 600px) {
+ 
+    div.order-summary-total-container{        
+        flex-direction: column;
+    }
+
+}
+
+
+@media only screen and (max-width: 500px) {
+
+    section.cart-order-summary{
+        flex: 1;
+    }
+
+}
+
+@media only screen and (max-width: 500px) {
+
+    div.coupon-container{
+        flex-direction: column;
+        
+    }
+
+    div.coupon-container * {
+        width: 100%;
+    }
+
+}
+

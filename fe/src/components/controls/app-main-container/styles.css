@@ -1,3 +1,9 @@
 section.page-content{
    min-height: calc(100vh - 167px);
 }
+
+@media only screen and (max-width: 600px) {
+   section.page-content{
+      width: 100%;
+   }     
+}

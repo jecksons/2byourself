@@ -1,0 +1,60 @@
+a.my-orders-item{
+    min-width: 37rem;
+}
+
+div.my-orders-parent-loading{
+    min-height: 100vh;
+    min-width: 37rem;
+}
+
+div.parent-pagetrack-my-orders{
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+    justify-content: flex-end;
+    min-width: 15rem;
+}
+
+div.my-orders-parent{
+    min-width: 37rem;
+    padding: 0 1rem;
+    box-sizing: border-box;        
+}
+
+@media only screen and (max-width: 640px) {
+
+    a.my-orders-item{
+        min-width: 85vw;
+    }
+
+    div.my-orders-parent-loading{
+        min-width: 85vw;
+    }    
+
+    div.my-orders-parent{
+        min-width: 85vw;
+    }
+
+    ol.my-orders{
+        width: 100%;
+        background-color: 'cyan'        
+    }
+
+    ul.order-item-img-sample{
+        display: none;
+    }
+    
+
+}
+
+@media only screen and (max-width: 600px) {
+
+
+    div.my-orders-parent{
+        width: 100%;
+
+    }
+
+
+
+}

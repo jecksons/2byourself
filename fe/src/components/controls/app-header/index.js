@@ -126,7 +126,7 @@ function UserButton(props) {
    );
 }
 
-function AppHeaderFull({menuData, cartQtd, cartInfo}) {
+function AppHeaderFull({menuData, cartQtd, cartInfo, withoutMenu}) {
 
    const [itemMenuExpanded, setItemMenuExpanded] = useState(null);
    const [requestExpandMenu, setRequestMenuExpand] = useState(null);
@@ -147,7 +147,7 @@ function AppHeaderFull({menuData, cartQtd, cartInfo}) {
          <div className='row-1 back-prim pad-1 width-100-1 just-center'>
             <div className='row-1 gap-2 flex-1  max-width-90 '>          
                <a href='/'><img src={logo} height={40} alt='logo'  /></a>
-               <input className='product-search' />
+               {!withoutMenu && <input className='product-search' />}               
                <div className='row gap-2' >
                   <UserButton />
                   <div className='pos-relative'>
@@ -159,17 +159,22 @@ function AppHeaderFull({menuData, cartQtd, cartInfo}) {
                </div>         
             </div>      
          </div>      
-         <nav className='row surface just-center pos-relative' onMouseLeave={() => setRequestMenuExpand(null)} >
-            {menuData && 
-               menuData.map((itm, idx) => <HeaderMenuItem  key={idx}  info={itm}  onHoverMenu={setRequestMenuExpand} selItem={itemMenuExpanded} /> )
-            }
-            <HiddenMenu sender={itemMenuExpanded} onHoverMenu={setRequestMenuExpand} />
-            <HiddenMenuOverlay show={itemMenuExpanded}  />         
-         </nav>            
-         <div className='row-1 just-center back-prim-4 width-100-025 pad-025 color-prim-4-on'>
-            <img src={airplane} height={32} style={{color: '#fff'}}  alt='air shipping' />
-            <strong >FREE SHIPING ON PURCHASES OVER $100</strong>
-         </div>               
+         {!withoutMenu  && 
+            <>
+               <nav className='row surface just-center pos-relative' onMouseLeave={() => setRequestMenuExpand(null)} >
+                  {menuData && 
+                     menuData.map((itm, idx) => <HeaderMenuItem  key={idx}  info={itm}  onHoverMenu={setRequestMenuExpand} selItem={itemMenuExpanded} /> )
+                  }
+                  <HiddenMenu sender={itemMenuExpanded} onHoverMenu={setRequestMenuExpand} />
+                  <HiddenMenuOverlay show={itemMenuExpanded}  />         
+               </nav>            
+               <div className='row-1 just-center back-prim-4 width-100-025 pad-025 color-prim-4-on'>
+                  <img src={airplane} height={32} style={{color: '#fff'}}  alt='air shipping' />
+                  <strong >FREE SHIPING ON PURCHASES OVER $100</strong>
+               </div>           
+            </>         
+         }
+             
       </div>
    );
 }
@@ -276,7 +281,7 @@ function AppHeaderCompact({menuData, cartQtd, cartInfo}) {
    );
 }
 
-export default function AppHeader(props) {
+export default function AppHeader({withoutMenu}) {
 
    const {cartInfo} = useContext(CartContext);
    const cartQtd = cartInfo ? cartInfo.items.reduce((prev, val) => (parseFloat(prev) + val.quantity), [0]) : 0;
@@ -284,7 +289,7 @@ export default function AppHeader(props) {
 
    return (
       <header className="col width-100 parent-app-header ">
-         <AppHeaderFull  menuData={menuData} cartQtd={cartQtd} cartInfo={cartInfo} />
+         <AppHeaderFull  menuData={menuData} cartQtd={cartQtd} cartInfo={cartInfo} withoutMenu={withoutMenu} />
          <AppHeaderCompact  menuData={menuData} cartQtd={cartQtd} cartInfo={cartInfo} />
       </header>
    );

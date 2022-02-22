@@ -39,14 +39,15 @@ function BagAddedNotification(){
 
 function ProductImage({imgUrl}) {
    const [selImg, setSelImg] = useState(0);
-
+//style={{minHeight: 400}}
+//
    return <div className="col-05 width-100 align-start  flex-1">
-      <div className="row-05 width-100 just-center flex-1"  style={{minHeight: 400}} >
+      <div className="row-05 width-100 just-center flex-1"   >
          <InnerImageZoom 
                height={400} 
                zoomScale={1}             
-               className={selImg === 1 ? `img-flip` : ''}
-               width={400} src={`${api.defaults.baseURL}${imgUrl}`}   />    
+               className={`img-product-zoom ${selImg === 1 ? `img-flip ` : ' '}`}
+                src={`${api.defaults.baseURL}${imgUrl}`}   />    
       </div>      
       <div className="row-05 just-start pad-1">
          <div 
@@ -68,15 +69,20 @@ function ProductReviews({userRating}) {
 
    const ratDist = userRating.distribuition;
 
-   return <div className="row gap-105 align-start">
+   return <div className="row gap-105 align-start flex-wrap" >
       <ol className="col-05 col-reverse align-start">
-         {ratDist.map((itm) => <li key={itm.rating} className="row-05 just-start">
-            <label className="width-4 text-right">{itm.rating} stars</label>
-            <div className="rating-bar" style={{width: 224, height: 8}}>
-               {itm.ratio > 0 &&  <div style={{width: 224 * itm.ratio, height: 8 }}> </div>}               
-            </div>
-            <label>{itm.total}</label>
-         </li> )}
+         {ratDist.map((itm) => {
+            console.log(`${Math.round(itm.ratio * 100)}'%`);
+            return (
+               <li key={itm.rating} className="row-05 just-start">
+                  <label className="width-4 text-right">{itm.rating} stars</label>
+                  <div className="rating-bar" style={{width: '35vw', maxWidth: 224, height: 8}}>
+                     {itm.ratio > 0 &&  <div style={{width: `${Math.round(itm.ratio * 100)}%`, height: 8 }}> </div>}               
+                  </div>
+                  <label>{itm.total}</label>
+               </li>
+            )
+         } )}
       </ol>
       <div className="col-05 just-start align-start">
          <ProductRating value={Math.round(userRating.rating_average)} maxValue={5} size={20} />         
@@ -109,12 +115,17 @@ function RecentlyVisited({productId, lastVisited}) {
       });     
    }, []);
 
-   useEffect(() => {
+   useEffect(() => {      
       const timout = setTimeout(() => {
          onScrollItems();
       }, 100);
       return () => clearTimeout(timout);
-   }, [onScrollItems])
+   }, [onScrollItems]);
+
+   useEffect(() => {
+      window.addEventListener('resize', onScrollItems);
+      return () => window.removeEventListener('resize', onScrollItems);      
+   }, [onScrollItems]);
    
    const handleNavRight = useCallback(() => {
       const remWidth =  (refList.current.scrollWidth - refList.current.scrollLeft) - refList.current.clientWidth;
@@ -156,23 +167,25 @@ function RecentlyVisited({productId, lastVisited}) {
    }, []);
 
    
-   return (IdsToShow.length > 0) && <section className="col-05 align-start main-content-width">      
-      <header className="row-05 width-100">
-         <h3>Last Visited</h3>
-         <div className="row-05">
-            {<button className={`btn-icon btn-icon-circle ${navButtons.left ? ' ' : 'btn-disabled'} `} onClick={navButtons.left ? handleNavLeft : null}><BsChevronLeft size={16} /> </button>}
-            {<button className={`btn-icon btn-icon-circle ${navButtons.right ? ' ' : 'btn-disabled'}`} onClick={navButtons.right ?  handleNavRight : null}><BsChevronRight size={16} /></button>}        
-         </div>
-      </header>
-      <ol className="row-1 scroll-h scroll-hidden width-100 pad-0-0-1" ref={refList} onScroll={onScrollItems}>         
-         {IdsToShow.map((itm) => <ProductCardId key={itm} productId={itm} /> )}         
-      </ol>
-   </section>
+   return (IdsToShow.length > 0) && (
+      <section className="col-05 align-start main-content-width">      
+         <header className="row-05 width-100">
+            <h3>Last Visited</h3>
+            <div className="row-05">
+               {<button className={`btn-icon btn-icon-circle ${navButtons.left ? ' ' : 'btn-disabled'} `} onClick={navButtons.left ? handleNavLeft : null}><BsChevronLeft size={16} /> </button>}
+               {<button className={`btn-icon btn-icon-circle ${navButtons.right ? ' ' : 'btn-disabled'}`} onClick={navButtons.right ?  handleNavRight : null}><BsChevronRight size={16} /></button>}        
+            </div>
+         </header>
+         <ol className="last-visited-list scroll-h scroll-hidden" ref={refList} onScroll={onScrollItems}>         
+            {IdsToShow.map((itm) => <ProductCardId key={itm} productId={itm} /> )}         
+         </ol>
+      </section>
+   )
 }
 
 function ProductSize({productSizes, selectedSizeId, onSelectSize}) {
 
-   return productSizes.length > 0 && <ol className="row-05">
+   return productSizes.length > 0 && <ol className="row-05 flex-wrap just-start">
       {productSizes.map((itm) => <button 
          className={`btn btn-size-option${selectedSizeId === itm.id ? '-selected' : ''}`}
          key={itm.id} onClick={() => onSelectSize(itm.id)}>{itm.description}</button>)}
@@ -210,16 +223,18 @@ function AddProduct({productId, selectedSize, quantity}) {
       }
    }, [selectedSize, quantity, productId, cartInfo.id, setCartInfo, setItemAdded, setProdAddError]);   
 
-   return  <div className="col-05">
-      <ButtonActionPrimary 
-               processing={posting}
-               onClick={handleAddItem}
-               caption='Add To Bag'
-               minWidth={250}
-         />
-      <ItemFormError  message={prodAddError} />
-      {itemAdded && <BagAddedNotification/>}      
-   </div>            
+   return (
+      <div className="col-05 width-100">
+         <ButtonActionPrimary 
+                  processing={posting}
+                  onClick={handleAddItem}
+                  caption='Add To Bag'
+                  fullSize={true}
+            />
+         <ItemFormError  message={prodAddError} />
+         {itemAdded && <BagAddedNotification/>}      
+      </div>
+   ) 
 }
 
 export default function ProductDetail(props) {
@@ -267,7 +282,7 @@ export default function ProductDetail(props) {
             <SurfaceLoading  /> :
             (
                loadingProduct === LS_LOADED ?               
-                  <section className='col gap-105 pad-105'> 
+                  <section className='product-parent-info'> 
                      <div className="row-1 just-start width-100">
                         <a className='link underline-hover' href={ProductController.getProductFiltersUri(productData.genre)} >{productData.genre.description}  </a>
                         <label>-</label>
@@ -275,10 +290,10 @@ export default function ProductDetail(props) {
                         <label>-</label>
                         <a className='link underline-hover' href={ProductController.getProductFiltersUri(productData.genre, productData.category, productData.brand)} >{productData.brand.description}  </a>                        
                      </div>
-                     <section className="card-item main-content-width-pad">                     
-                        <div className="row-05 align-start">
+                     <section className="card-item main-content-width">                     
+                        <div className="row-05 align-start flex-wrap">
                            <ProductImage  imgUrl={productData.image} />                           
-                           <div className="col-05 just-start align-start pad-05 width-20 gap-105">
+                           <div className="product-main-info">
                               <div className="col-05 align-start">
                                  <a className='no-decoration color-grey font-bold underline-hover' href={ProductController.getProductFiltersUri(null, null, productData.brand)}>{productData.brand.description}</a>
                                  <h1>{productData.description}</h1>
@@ -333,7 +348,7 @@ export default function ProductDetail(props) {
                            <h3>Customer Reviews</h3>
                            <ProductReviews  userRating={productData.user_rating} />
                         </div>
-                     </section>
+                     </section>                     
                      <RecentlyVisited productId={productId} lastVisited={lastProdIds} />
                   </section>
                    :

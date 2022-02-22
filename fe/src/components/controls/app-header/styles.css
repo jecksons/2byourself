@@ -175,11 +175,14 @@ div.compact-menu-overlay{
    left: 0;
    right: 0;
    bottom: 0;
+   visibility: hidden;
    transition: opacity 0.5s ease;
 }
 
 div.compact-menu-overlay.show{
    opacity: 1;   
+   visibility: visible;
+   z-index: 9998; 
 }
 
 
