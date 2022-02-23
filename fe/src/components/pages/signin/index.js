@@ -20,7 +20,6 @@ export default function Signin(props) {
                     <label className='font-105 color-grey'>Login</label>
                     <LoginControl 
                         onNext={() => {
-                            console.log(searchParams.get('originalPath'));
                             if (searchParams.get('originalPath')) {                                
                                 navigate(searchParams.get('originalPath'), {replace: true});
                             } else {

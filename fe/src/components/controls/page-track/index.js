@@ -56,7 +56,6 @@ function PageTrack({pageSize, rowTotal, rowOffset, onSelectOffset}) {
       rowOffset]);   
 
    const handleChangeSel = useCallback((option) => {
-      console.log('clicked');
       if (option) {
          onSelectOffset(option.value);
       }      

@@ -18,7 +18,7 @@ const SS_ERROR = 2;
 
 const InitialUpdateItemState = {quantity: false, remove: false};
 
-function CartItemEditable({item, onUpdateAction}) {
+export function CartItemEditable({item, onUpdateAction, showAsCard = true}) {
 
    const [quantity, setQuantity] = useState(item.quantity);
    const [updateState, setUpdateState] = useState(InitialUpdateItemState);
@@ -40,7 +40,7 @@ function CartItemEditable({item, onUpdateAction}) {
    }, [onUpdateAction, item.id, onChangeRejected]);
    
    return (
-      <li className="row-1 pad-1 align-start card-square width-100 border-box card-cart-item">
+      <li className={`row-1 align-start ${showAsCard ? 'card-square' : ''} width-100 border-box card-cart-item`}>
          <div className="row-1 just-start">
             <div className="container-img-cart-item">
                <img src={`${api.defaults.baseURL}${item.image}`} style={{maxWidth: 72, maxHeight: 72}} alt={item.description} />      

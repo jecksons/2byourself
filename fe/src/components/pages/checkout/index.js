@@ -175,8 +175,7 @@ function CheckoutPage({idCart, cartValue, onSelectFreightValue, onSuccessSale}) 
             freight_value: selDelivery.value,
             days_to_delivery: selDelivery.dayRange.length > 0 ? selDelivery.dayRange[selDelivery.dayRange.length-1] : null
          })
-         .then((ret) => {
-            console.log(ret.data);            
+         .then((ret) => {       
             onSuccessSale();
          })
          .catch((err) => {
@@ -276,7 +275,6 @@ export default function Checkout(props) {
          setScreenState(SS_ERROR);
          return;
       }
-      console.log('loading cart');
       const cancelToken = api.getCancelToken();
       const fetchCart = async () => {
          try {
