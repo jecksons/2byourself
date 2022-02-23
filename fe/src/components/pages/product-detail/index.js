@@ -72,7 +72,6 @@ function ProductReviews({userRating}) {
    return <div className="row gap-105 align-start flex-wrap" >
       <ol className="col-05 col-reverse align-start">
          {ratDist.map((itm) => {
-            console.log(`${Math.round(itm.ratio * 100)}'%`);
             return (
                <li key={itm.rating} className="row-05 just-start">
                   <label className="width-4 text-right">{itm.rating} stars</label>
@@ -261,7 +260,6 @@ export default function ProductDetail(props) {
          } catch (err) {
             if (!api.isCancel(err)) {
                if (err.response &&  err.response.status === 404)  {
-                  console.log('404 memo');
                   setErrorMessage({title: 'Product not found!', subtitle: 'Please verify the selected product.'});
                   setLoadingProduct(LS_ERROR);                  
                   return;

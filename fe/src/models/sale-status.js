@@ -23,7 +23,6 @@ class SaleStatus{
    getImg() {
       const itm = SaleStatusList.find((itm) => itm.id === this.id );
       if (itm) {
-         console.log('get item ' + itm.media);
          return require(`../media/${itm.media}`);
       }      
    }

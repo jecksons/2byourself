@@ -10,6 +10,10 @@ import UserContext from '../../../store/user-context';
 import {IoIosArrowDown, IoIosArrowUp, IoIosSearch, IoMdMenu, IoMdClose} from  'react-icons/io';
 import {BiExit, BiNews} from 'react-icons/bi';
 import AuthService from '../../../services/auth-service';
+import CartController from "../../../controllers/cart-controller";
+import { CartItemEditable } from '../../pages/cart';
+import utils from "../../../services/utils";
+import {ErrorToast} from "../../controls/toast";
 
 function HiddenMenuOverlay({show}) {
    return <div className={`overlay-header-menu  ${show ? 'show' : ''}`}> </div>
@@ -126,6 +130,94 @@ function UserButton(props) {
    );
 }
 
+
+
+function CartContent({show}) {
+
+   const {cartInfo, setCartInfo} = useContext(CartContext);
+   const cartId = cartInfo ? cartInfo.id : null;
+
+   const handleUpdateCartItem = useCallback((action, onReject) => {      
+      if (action.type === 'update') {
+         CartController.updateCartItem(cartId, action.id, action.value)
+         .then((ret) => {
+            setCartInfo(ret.data);
+         })
+         .catch((err) => {
+            ErrorToast.fire(
+               {
+                  title: `The quantity can't be updated.`,
+                  text: utils.getHTTPError(err),
+                  icon: 'error'
+               }
+            );
+            onReject();
+         });
+      } else if (action.type === 'remove') {
+         CartController.deleteCartItem(cartId, action.id)
+         .then((ret) => {
+            setCartInfo(ret.data);
+         })
+         .catch((err) => {
+            ErrorToast.fire(
+               {
+                  title: `The item can't be deleted.`,
+                  text: utils.getHTTPError(err),
+                  icon: 'error'
+               }
+            );
+            onReject();
+         });
+      }
+   }, [cartId, setCartInfo]);
+
+   return (cartInfo && (cartInfo.items.length > 0)) && (
+      <div className={`parent-cart-header ${show ? 'show' : ''} `}>
+         <div className={`content-cart-header `} >
+            <ul className='col-05 cart-header-list'>
+               {
+                  cartInfo.items.map((itm) => <CartItemEditable  
+                     key={itm.id + (itm.total_value / 100)}  
+                     showAsCard={false}
+                     item={itm}  
+                     onUpdateAction={handleUpdateCartItem}/> )
+               }
+            </ul>
+            <div className='row-1 align-start ' >
+               <div className='row-05 just-end flex-1' >
+                  <label className='color-grey'>Total</label>
+                  <label className='font-105 font-bold'>${cartInfo.total_value.toFixed(2)}</label>
+               </div>
+               <div className='flex-1'>
+                  <a className="btn-action-primary width-100 " href="/checkout">Checkout</a>
+               </div>
+            </div>
+         </div>
+      </div>
+
+   )
+}
+
+
+function CartButton({cartInfo, cartQtd}) {
+
+   const [showCart, setShowCart] = useState(false);
+   const navigate = useNavigate();
+
+   return (
+      <div className='pos-relative' onMouseEnter={() => setShowCart(true)} onMouseLeave={() => setShowCart(false)}  >
+         <button className='btn-icon btn-shop-cart' onClick={() => {
+            navigate('/cart');
+         }} >
+            {(cartInfo.items || []).length > 0 && <label>{cartQtd}</label>}
+            {(cartInfo.items || []).length > 0 ? <BsHandbagFill color='#fff'  size={24}/>  :  <BsHandbag  color='#fff' size={24}/> }                                          
+         </button>                  
+         <CartContent  cartInfo={cartInfo} show={showCart} />
+      </div>
+   );
+
+}
+
 function AppHeaderFull({menuData, cartQtd, cartInfo, withoutMenu}) {
 
    const [itemMenuExpanded, setItemMenuExpanded] = useState(null);
@@ -150,12 +242,7 @@ function AppHeaderFull({menuData, cartQtd, cartInfo, withoutMenu}) {
                {!withoutMenu && <input className='product-search' />}               
                <div className='row gap-2' >
                   <UserButton />
-                  <div className='pos-relative'>
-                     <button className='btn-icon btn-shop-cart' >
-                        {(cartInfo.items || []).length > 0 && <label>{cartQtd}</label>}
-                        {(cartInfo.items || []).length > 0 ? <BsHandbagFill color='#fff'  size={24}/>  :  <BsHandbag  color='#fff' size={24}/> }                                          
-                     </button>                  
-                  </div>
+                  <CartButton  cartInfo={cartInfo} cartQtd={cartQtd} />
                </div>         
             </div>      
          </div>      
@@ -260,12 +347,7 @@ function AppHeaderCompact({menuData, cartQtd, cartInfo}) {
                   <button className='btn no-pad'>
                      <IoIosSearch color='#fff' size={24}/>
                   </button>                  
-                  <div className='pos-relative'>
-                     <button className='btn btn-shop-cart no-pad' >
-                        {(cartInfo.items || []).length > 0 && <label>{cartQtd}</label>}
-                        {(cartInfo.items || []).length > 0 ? <BsHandbagFill color='#fff' size={16}/>  :  <BsHandbag  color='#fff' size={24}/> }                                          
-                     </button>                  
-                  </div>
+                  <CartButton  cartInfo={cartInfo} cartQtd={cartQtd} />
                   <button className={`btn no-pad`} style={isExpanded ?  {marginRight: 17} : {}}  onClick={() => setIsExpanded(p => !p)}>
                      {
                         isExpanded ? 

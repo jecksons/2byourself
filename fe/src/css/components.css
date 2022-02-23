@@ -46,6 +46,7 @@ div.container-img-cart-item{
    justify-content: center;
    width: 72px;   
    height: 72px;
+   min-width: 72px;
 }
 
 

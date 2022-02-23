@@ -36,8 +36,53 @@ button.btn-shop-cart > label{
    font-weight: bold;
    font-size: 0.75rem;
    box-shadow: 1px 1px 1px 0 rgba(0,0,0, 0.25);
+   cursor: pointer;
 }
 
+
+div.parent-cart-header{
+   display: flex;
+   flex-direction: column;
+   position: absolute;
+   top: 100%;
+   right: 0;   
+   z-index: 999;
+   background-color: rgba(255, 255, 255, 0);   
+   box-shadow: 0 0 2px 0 #707070;
+   border-radius: 6px;   
+   transition: background-color 0.2s ease-in;
+}
+
+div.content-cart-header{
+   display: none;
+   padding: 1rem;
+   gap: 1rem;   
+   flex-direction: column;
+}
+
+div.parent-cart-header.show   div.content-cart-header{   
+   display: flex;
+}
+
+div.parent-cart-header.show{   
+   background-color: rgba(255, 255, 255, 1);
+}
+
+div.parent-cart-header::before{
+   content: " ";
+   background-color: rgba(255,255,255, 0);
+   transition: background-color 0.5s ease-in;
+}
+
+div.parent-cart-header.show::before{   
+   position: absolute;
+   top: -3px;
+   left: calc(100% - 3rem);
+   width: 12px;
+   height: 12px;
+   transform: rotate(45deg);
+   background-color: #fff;
+}
 
 div.overlay-header-menu{
    min-height: 100vh;   
@@ -200,6 +245,18 @@ div.compact-menu-content{
    background-color: #fff;   
 }
 
+ul.cart-header-list{   
+   display: flex;
+   max-height: 80vh;
+   overflow-y: auto;
+   flex-direction: column;   
+   padding: 0 0.5rem 0 0;
+}
+
+ul.cart-header-list > li{
+   padding: 0.5rem 0;
+   border-bottom: 1px solid #f0f0f0;
+}
 
 
 @media only screen and (max-width: 768px)  {
