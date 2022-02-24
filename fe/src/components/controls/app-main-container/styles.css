@@ -2,8 +2,11 @@ section.page-content{
    min-height: calc(100vh - 167px);
 }
 
-section.page-content.sticky{
-   padding-top: 54px;
+
+@media only screen and (max-width: 768px) {
+   section.page-content.sticky{
+      padding-top: 54px;
+   }
 }
 
 @media only screen and (max-width: 600px) {

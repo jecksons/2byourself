@@ -9,6 +9,7 @@ import SaleStatus from '../../../models/sale-status';
 import {TiTick} from 'react-icons/ti';
 import './styles.css';
 import AppMainContainer from '../../controls/app-main-container';
+import ProductController from '../../../controllers/product-controller';
 
 
 const LS_LOADING = 0;
@@ -101,7 +102,7 @@ function OrderItems({items}) {
                </div>
                <div className='col-05 align-start just-start'>
                   <label className='font-75 color-grey font-bold'>{itm.brand}</label>
-                  <label >{itm.description}</label>
+                  <a className='btn-link font-87' href={ProductController.getProductUri(itm.id_product, itm.description, itm.brand )}  >{itm.description}</a>
                   <div className='row-1'>
                      <label className='font-75'>Size: {itm.size}</label>
                      <label className='font-75'> Quantity: {itm.quantity}</label>
