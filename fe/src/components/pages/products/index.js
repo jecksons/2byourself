@@ -175,8 +175,8 @@ const getProductsTitle = (filters, separator = ' - ') => {
 }
 
 const getPageTitle = (filters) => {
-   let strRes = '2BYourSelf';
-   strRes += getProductsTitle(filters) || ` - Products`;   
+   let strRes = '2BYourself - ';
+   strRes += getProductsTitle(filters) || `Products`;   
    return strRes;
 }
 

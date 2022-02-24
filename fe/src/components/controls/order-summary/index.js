@@ -1,12 +1,9 @@
 import PropTypes from 'prop-types';
-import { useState } from 'react';
 import "./styles.css";
 
 
 function OrderSummary({cartInfo, showActions = true, deliveryPrice = null}) {
-
-   const [couponText, setCouponText] = useState('');
-
+   
    return (
       <section className="card-square no-pad cart-order-summary">
          <div className="border-bottom-grey">

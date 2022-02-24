@@ -292,6 +292,7 @@ class CartController {
          ret.subtotal = UtilsLib.roundTo( ret.total_value + ret.total_discount, 2);         
          ret.items = rows.map((itm) => ({
             id: itm.id_cart_item,
+            id_product: itm.id_product,
             description: itm.description,
             size: itm.size,
             quantity: itm.quantity,

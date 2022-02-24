@@ -14,7 +14,7 @@ function ProductRating({value, maxValue, size = 12}) {
    })
 
    return <ol className='row'>
-      {itemsFill.map((itm, index) => <img style={{height: size}} key={index} src={ itm ? star_filled : star} />)}
+      {itemsFill.map((itm, index) => <img alt='rating star' style={{height: size}} key={index} src={ itm ? star_filled : star} />)}
    </ol>
 
 }

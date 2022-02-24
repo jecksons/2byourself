@@ -11,6 +11,7 @@ import SurfaceLoading from "../../controls/surface-loading";
 import './styles.css';
 import {ErrorToast} from "../../controls/toast";
 import AppMainContainer from "../../controls/app-main-container";
+import ProductController from "../../../controllers/product-controller";
 
 const SS_LOADING = 0;
 const SS_LOADED = 1;
@@ -39,6 +40,8 @@ export function CartItemEditable({item, onUpdateAction, showAsCard = true}) {
       onUpdateAction({type: 'remove', id: item.id}, onChangeRejected);
    }, [onUpdateAction, item.id, onChangeRejected]);
    
+   
+
    return (
       <li className={`row-1 align-start ${showAsCard ? 'card-square' : ''} width-100 border-box card-cart-item`}>
          <div className="row-1 just-start">
@@ -47,7 +50,7 @@ export function CartItemEditable({item, onUpdateAction, showAsCard = true}) {
             </div>         
             <div className="col-05 align-start min-width-8 ">
                <label className="font-bold font-75 color-grey">{item.brand}</label>
-               <label>{item.description}</label>
+               <a className='btn-link font-87' href={ProductController.getProductUri(item.id_product, item.description, item.brand )}  >{item.description}</a>
                <label className="font-75">Size: {item.size}</label>
                {
                   item.discount > 0 ? 
