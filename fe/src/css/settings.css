@@ -29,34 +29,31 @@
    License: none (public domain)
 */
 
-
-
-@font-face {
-   font-family: 'oxygen';
-   src: url('./fonts/oxygen-bold-webfont.woff2') format('woff2'),
-   		url('./fonts/oxygen-bold-webfont.woff') format('woff');
-   font-weight: bold;
-   font-style: normal;
-}
-
-
-@font-face {
-   font-family: 'oxygen';
-   src: url('./fonts/oxygen-light-webfont.woff2') format('woff2'),
-   		url('./fonts/oxygen-light-webfont.woff') format('woff');
-   font-weight: 300;
-   font-style: normal;
-}
-
-
-@font-face {
-   font-family: 'oxygen';
-   src: url('./fonts/oxygen-regular-webfont.woff2') format('woff2'),
-   		url('./fonts/oxygen-regular-webfont.woff') format('woff');
-   font-weight: normal;
-   font-style: normal;
-}
-
+ 
+ 
+ @font-face {
+	font-family: 'mulish';
+	src: url('./fonts/Mulish-Bold.ttf') format('truetype');
+	font-weight: bold;
+	font-style: normal;
+ }
+ 
+ 
+ @font-face {
+	font-family: 'mulish';
+	src: url('./fonts/Mulish-Light.ttf') format('truetype');
+	font-weight: 300;
+	font-style: normal;
+ }
+ 
+ 
+ @font-face {
+	font-family: 'mulish';
+	src: url('./fonts/Mulish-Regular.ttf') format('truetype');
+	font-weight: normal;
+	font-style: normal;
+ }
+ 
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -77,7 +74,7 @@ time, mark, audio, video {
 	font-size: 100%;
 	font: inherit;
 	vertical-align: baseline;
-   font-family: 'oxygen', 'Arial', Courier, monospace;
+   	font-family: "mulish", 'Arial', Courier, monospace;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -110,7 +107,7 @@ label,
 strong,
 div,
 a{
-	font-family: inherit;
+	font-family: "mulish", 'Arial', Courier, monospace;
 	font-size: 1rem;
 }
 
