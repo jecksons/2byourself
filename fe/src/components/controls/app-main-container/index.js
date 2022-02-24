@@ -7,7 +7,7 @@ export default function AppMainContainer(props) {
    return   (
       <main className="col background height-full just-start">
          <AppHeader />
-         <section className="col flex-1 just-start page-content" >      
+         <section className="col flex-1 just-start page-content" id="page-content" >      
             {props.children}
          </section>
          <AppFooter />

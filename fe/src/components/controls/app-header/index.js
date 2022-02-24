@@ -3,7 +3,7 @@ import airplane from '../../../media/plane.png';
 import {BsHandbag, BsHandbagFill} from 'react-icons/bs';
 import {useLocation, useNavigate} from 'react-router-dom';
 import './styles.css';
-import { useCallback, useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState, useRef } from 'react';
 import CartContext from '../../../store/cart-context';
 import MenuContext from '../../../store/menu-context';
 import UserContext from '../../../store/user-context';
@@ -14,6 +14,8 @@ import CartController from "../../../controllers/cart-controller";
 import { CartItemEditable } from '../../pages/cart';
 import utils from "../../../services/utils";
 import {ErrorToast} from "../../controls/toast";
+import api from '../../../services/api';
+import ProductController from '../../../controllers/product-controller';
 
 function HiddenMenuOverlay({show}) {
    return <div className={`overlay-header-menu  ${show ? 'show' : ''}`}> </div>
@@ -215,6 +217,138 @@ function CartButton({cartInfo, cartQtd}) {
          <CartContent  cartInfo={cartInfo} show={showCart} />
       </div>
    );
+}
+
+const ProductItemNotFound = {
+   id: -1,
+   filter_type: ' ',
+   description: 'No items found',
+}
+
+
+function ProductSearchInput({extInputRef, autoFocus}) {
+
+   const [searchInput, setSearchInput] = useState('');
+   const [searchText, setSearchText] = useState('');
+   const [inputOptions, setInputOptions] = useState({loading: false, items: []});
+   const [showOptions, setShowOptions] = useState(false);
+   const intRef = useRef(null);
+   const inputRef = extInputRef || intRef;
+   const [selIndex, setSelIndex] = useState(-1);
+   const navigate = useNavigate();
+   const isMonted = useRef(true);
+
+   useEffect(() => {
+      return () => isMonted.current = false;
+   }, []);
+
+   useEffect(() => setSelIndex(-1), [showOptions]);
+   
+
+   useEffect(() => {
+      const cancelToken = api.getCancelToken();
+      const fetchItems = async () => {
+         try {
+            setInputOptions(p => ({...p, loading: true}));
+            const ret = await ProductController.getProductTextSearchOptions(searchText);
+            setInputOptions(p => ({loading: false, items: ret.data.results}));
+            setSelIndex(-1);
+         } catch (err) {
+            if (!api.isCancel(err)) {
+               console.log(err);
+               setInputOptions(p => ({...p, loading: false}));
+            }            
+         }         
+      }      
+      fetchItems();
+      return () => cancelToken.cancel();
+   }, [searchText]);
+
+   useEffect(() => {
+      const timOut = setTimeout(() => {
+         if (isMonted.current) {
+            setSearchText(searchInput);
+         }                  
+      }, 500);
+      return () => clearTimeout(timOut);
+   }, [searchInput]);
+
+   const requestCloseOptions = useCallback(() => {
+      setTimeout(() => {
+         if (isMonted.current) {
+            setShowOptions(false);
+         }         
+      }, [150]);
+   }, [setShowOptions]);
+
+   const onSelectItem = useCallback((itm) => {      
+      setSearchInput(itm.description);   
+      setShowOptions(false);
+      inputRef.current.blur();
+      if (itm.filter_type === 'product') {
+         navigate(ProductController.getProductUri(itm.id, itm.description, ''));
+      } else {
+         navigate(ProductController.getProductFilterUri(itm.filter_type, itm.id, itm.description));
+      }
+   }, [inputRef, setSearchInput, setShowOptions, navigate]);
+
+   const handleKeyDown = useCallback((e) => {
+      const iInc = (e.code === 'ArrowDown') ? 1 : ((e.code === 'ArrowUp') ?  -1 : 0 );
+      if (iInc !== 0) {
+         setSelIndex(p => (
+            ((p + iInc) >= 0) && 
+            (inputOptions.items.length > 0) && 
+            ((p + iInc) < inputOptions.items.length)
+         ) ? (p + iInc) : p);
+      } else if (e.code === 'Enter') {
+         if (selIndex >= 0) {
+            onSelectItem(inputOptions.items[selIndex]);
+         } else if (searchInput !== '') {
+            inputRef.current.blur();
+            navigate(ProductController.getProductSearchTextUri(searchInput));
+         }
+      }
+   }, [inputOptions.items, selIndex, setSelIndex, onSelectItem, searchInput, navigate, inputRef] );
+
+   const onClearInput = useCallback(() => {
+      inputRef.current.focus();
+      setSearchText('');               
+      setSearchInput('');               
+      setTimeout(() => setShowOptions(true), 150);
+   }, [inputRef, setSearchText, setSearchInput, setShowOptions]);
+  
+
+   return (
+      <div className='flex-1 pos-relative'>
+         <input 
+            className={`product-search ${showOptions ? 'show' : ''}`} 
+            onFocus={() =>setShowOptions(true)} 
+            onBlur={requestCloseOptions}  
+            onClick={() =>setShowOptions(true)} 
+            onKeyDown={handleKeyDown}
+            value={searchInput} 
+            ref={inputRef}
+            onChange={(e) => setSearchInput(e.target.value)} />
+         <button 
+            className={`btn-clear-input ${searchInput !== '' ? 'show' : ''}`} 
+            onClick={onClearInput}  >
+            <IoMdClose size={16} />
+         </button>
+         <ul className={`product-search-select-items ${showOptions ? 'show' : ''} `}>
+            {(inputOptions.items.length > 0 ?  inputOptions.items : [ProductItemNotFound] ).map((itm, idx) => (
+               <li  
+                  className={`product-search-item ${idx === selIndex ? 'selected' : ''}`}
+                  onClick={itm.id === -1 ? null : () => onSelectItem(itm)}
+                  key={itm.id + itm.filter_type}>
+                     <div className='row-05 align-start'>
+                        <label className='font-87'>{itm.description }</label>
+                        <label className='font-75 color-grey'>{itm.filter_type.substr(0, 1).toUpperCase() + itm.filter_type.substr(1)}</label>
+                     </div>
+               </li>
+            ) )}
+         </ul>
+      </div>
+   )
 
 }
 
@@ -239,7 +373,7 @@ function AppHeaderFull({menuData, cartQtd, cartInfo, withoutMenu}) {
          <div className='row-1 back-prim pad-1 width-100-1 just-center'>
             <div className='row-1 gap-2 flex-1  max-width-90 '>          
                <a href='/'><img src={logo} height={40} alt='logo'  /></a>
-               {!withoutMenu && <input className='product-search' />}               
+               {!withoutMenu && <ProductSearchInput /> }               
                <div className='row gap-2' >
                   <UserButton />
                   <CartButton  cartInfo={cartInfo} cartQtd={cartQtd} />
@@ -293,7 +427,9 @@ function CompactHiddenMenu({menuData, show, onRequestClose}) {
 
    return (
       <div >
-         <div className={`compact-menu-overlay ${show ? 'show' : ''}`}> </div>
+         <div className={`compact-menu-overlay ${show ? 'show' : ''}`} 
+            onClick={onRequestClose}
+          > </div>
          <div className={`compact-menu-content ${show ? 'show' : ''} `}>
             <section className='col back-prim-5 color-white align-start'>
                <div className='pad-1 border-bottom-prim-4 width-100 border-box'>
@@ -332,6 +468,36 @@ function CompactHiddenMenu({menuData, show, onRequestClose}) {
 function AppHeaderCompact({menuData, cartQtd, cartInfo}) {
 
    const [isExpanded, setIsExpanded] = useState(false);
+   const navigate = useNavigate();
+   const [showSearch, setShowSearch] = useState(false);
+   const refSearch = useRef(null);
+   const refHeader = useRef(null);
+   const [showSticky, setShowSticky] = useState(false);
+
+   useEffect(() => {
+      const content = document.getElementById('page-content');
+      const headers = document.getElementsByClassName('app-header-compact');      
+      if (showSticky) {
+         content.classList.add('sticky');
+         if (headers.length > 0) {
+            headers[0].classList.add('sticky');
+         }
+      } else {
+         content.classList.remove('sticky');
+         if (headers.length > 0) {
+            headers[0].classList.remove('sticky');
+         }
+      }      
+   }, [showSticky]);
+
+   const handlePosSticky = useCallback(() => {
+      setShowSticky(window.scrollY > refHeader.current.clientHeight )
+   }, [refHeader]);
+
+   useEffect(() => {
+      window.onscroll = handlePosSticky;
+      return () => window.onscroll = null;
+   }, [handlePosSticky]);
 
    useEffect(() => {
       const body = document.querySelector('body');
@@ -339,16 +505,27 @@ function AppHeaderCompact({menuData, cartQtd, cartInfo}) {
    }, [isExpanded]);
    
    return (
-      <div className='app-header-compact width-100'>
+      <div className={`app-header-compact  width-100`} ref={refHeader}>
          <div className='row-1 back-prim pad-05-1 width-100-1 just-center' >
-            <div className='row-1 gap-2 flex-1  max-width-90  ' >          
+            <div className='row-1 gap-2 flex-1  ' >          
                <a href='/'><img src={logo} height={36} alt='logo'  /></a>
-               <div className='row gap-105 align-start'   >                  
-                  <button className='btn no-pad'>
-                     <IoIosSearch color='#fff' size={24}/>
-                  </button>                  
-                  <CartButton  cartInfo={cartInfo} cartQtd={cartQtd} />
-                  <button className={`btn no-pad`} style={isExpanded ?  {marginRight: 17} : {}}  onClick={() => setIsExpanded(p => !p)}>
+               <div className='row gap-105 align-start' >                  
+                  {!showSearch &&
+                     (
+                        <button className='btn no-pad' onClick={() => {
+                           setShowSearch(true);
+                        }}>
+                           <IoIosSearch color='#fff' size={24}/>
+                        </button>                  
+                     )
+                   }                  
+                  <div className='pos-relative'>
+                     <button className='btn btn-shop-cart no-pad' onClick={() => navigate('/cart')} >
+                        {(cartInfo.items || []).length > 0 && <label>{cartQtd}</label>}
+                        {(cartInfo.items || []).length > 0 ? <BsHandbagFill color='#fff' size={16}/>  :  <BsHandbag  color='#fff' size={24}/> }                                          
+                     </button>                  
+                  </div>
+                  <button className={`btn no-pad`} style={isExpanded ?  {marginRight: 0} : {}}  onClick={() => setIsExpanded(p => !p)}>
                      {
                         isExpanded ? 
                            <IoMdClose color="#fff" size={24}  /> :
@@ -358,6 +535,21 @@ function AppHeaderCompact({menuData, cartQtd, cartInfo}) {
                </div>         
             </div>      
          </div>                        
+         <section className={`header-small-search ${showSearch ? 'show' : ''}`} >
+            <ProductSearchInput extInputRef={refSearch} />
+            <div className='row-1'>               
+               <button className='btn no-pad' onClick={() => {
+                  if (refSearch.current.value !== '') {                     
+                     navigate(ProductController.getProductSearchTextUri(refSearch.current.value));
+                  }                  
+               }}>
+                  <IoIosSearch color='#fff' size={24}/>
+               </button>        
+               <button className='btn no-pad' onClick={() =>setShowSearch(false)}>
+                  <IoMdClose color="#fff" size={24}  />
+               </button>        
+            </div>
+         </section> 
          <CompactHiddenMenu menuData={menuData} show={isExpanded} onRequestClose={() => setIsExpanded(false)} />
       </div>
    );
