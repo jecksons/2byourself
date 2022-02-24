@@ -22,9 +22,9 @@ export function useCurrUser() {
 
 function getSessionStorageValue(key, defaultValue, isDate) {
    let strItem = sessionStorage.getItem(key);
-   if (typeof strItem !== 'undefined' && strItem) {      
+   if (strItem) {      
       if (isDate) {
-         strItem = strItem.replaceAll('"', '');
+         strItem = strItem.replace(/"/g, '');
          return new Date(strItem);
       }
       return JSON.parse(strItem) || defaultValue;
@@ -46,9 +46,9 @@ export function useSessionStorage(key, defaultValue, isDate) {
 
 function getLocalStorageValue(key, defaultValue, isDate) {
    let strItem = localStorage.getItem(key);
-   if (typeof strItem !== 'undefined' && strItem) {      
+   if (strItem) {            
       if (isDate) {
-         strItem = strItem.replaceAll('"', '');
+         strItem = strItem.replace(/"/g, '');
          return new Date(strItem);
       }
       return JSON.parse(strItem) || defaultValue;
