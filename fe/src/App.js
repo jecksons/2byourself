@@ -17,6 +17,7 @@ import MenuContext from './store/menu-context';
 import UserContext from './store/user-context';
 import Signin from './components/pages/signin';
 import RequireAuth from './components/controls/require-auth';
+import ErrorBoundary from './components/controls/error-boundary';
 
 function App() {
 
@@ -56,35 +57,37 @@ function App() {
     
   return (
     <div className="App">
-      <UserContext.Provider value={userValue} >
-        <CartContext.Provider value={cartValue}>
-          <MenuContext.Provider value={menuValue} >
-            <BrowserRouter>
-              <ScrollToTop>              
-                <Routes>                
-                  <Route path="/" element={<Products/>} />            
-                  <Route path='/login' element={<Signin/>} />
-                  <Route path="/products/" element={<Products/>}/>
-                  <Route path="/products/:productId" element={<ProductDetail/>}/>
-                  <Route exact path="/cart/" element={<Cart />} />
-                  <Route exact path="/my-orders/" element={
-                    <RequireAuth>
-                        <MyOrders />
-                    </RequireAuth>
-                  } />
-                  <Route exact path="/checkout/" element={<Checkout />} />
-                  <Route exact path="/orders/:orderId" element={
-                    <RequireAuth>
-                      <SaleOrder />
-                    </RequireAuth>
-                  } />
-                  <Route path="*" element={<Products/>} />                                
-                </Routes>
-              </ScrollToTop>          
-            </BrowserRouter>
-          </MenuContext.Provider>
-        </CartContext.Provider>
-      </UserContext.Provider>      
+      <ErrorBoundary>
+        <UserContext.Provider value={userValue} >
+          <CartContext.Provider value={cartValue}>
+            <MenuContext.Provider value={menuValue} >
+              <BrowserRouter>
+                <ScrollToTop>              
+                  <Routes>                
+                    <Route path="/" element={<Products/>} />            
+                    <Route path='/login' element={<Signin/>} />
+                    <Route path="/products/" element={<Products/>}/>
+                    <Route path="/products/:productId" element={<ProductDetail/>}/>
+                    <Route exact path="/cart/" element={<Cart />} />
+                    <Route exact path="/my-orders/" element={
+                      <RequireAuth>
+                          <MyOrders />
+                      </RequireAuth>
+                    } />
+                    <Route exact path="/checkout/" element={<Checkout />} />
+                    <Route exact path="/orders/:orderId" element={
+                      <RequireAuth>
+                        <SaleOrder />
+                      </RequireAuth>
+                    } />
+                    <Route path="*" element={<Products/>} />                                
+                  </Routes>
+                </ScrollToTop>          
+              </BrowserRouter>
+            </MenuContext.Provider>
+          </CartContext.Provider>
+        </UserContext.Provider>      
+      </ErrorBoundary>      
     </div>
   );
 }
