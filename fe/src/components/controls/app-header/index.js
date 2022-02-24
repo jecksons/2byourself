@@ -477,21 +477,23 @@ function AppHeaderCompact({menuData, cartQtd, cartInfo}) {
    useEffect(() => {
       const content = document.getElementById('page-content');
       const headers = document.getElementsByClassName('app-header-compact');      
-      if (showSticky) {
-         content.classList.add('sticky');
-         if (headers.length > 0) {
-            headers[0].classList.add('sticky');
-         }
-      } else {
-         content.classList.remove('sticky');
-         if (headers.length > 0) {
-            headers[0].classList.remove('sticky');
-         }
+      if (content) {
+         if (showSticky) {
+            content.classList.add('sticky');
+            if (headers.length > 0) {
+               headers[0].classList.add('sticky');
+            }
+         } else {
+            content.classList.remove('sticky');
+            if (headers.length > 0) {
+               headers[0].classList.remove('sticky');
+            }
+         }      
       }      
    }, [showSticky]);
 
    const handlePosSticky = useCallback(() => {
-      setShowSticky(window.scrollY > refHeader.current.clientHeight )
+      setShowSticky(refHeader.current ? (window.scrollY > refHeader.current.clientHeight) : false )
    }, [refHeader]);
 
    useEffect(() => {
