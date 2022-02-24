@@ -38,7 +38,7 @@ export default class ProductController {
    }
 
    static getProductUri(productId, description, brandName) {
-      return `/products/${productId}/?product=${brandName.replaceAll(' ', '_')}-${description.replaceAll(' ', '_')}`;
+      return `/products/${productId}/?product=${brandName.replace(/ /g, '_')}-${description.replace(/ /g, '_')}`;
    }
 
    static getProductFilterUri(filter, id, description) {
