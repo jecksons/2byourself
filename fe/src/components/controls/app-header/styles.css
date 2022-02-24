@@ -1,15 +1,83 @@
 input.product-search{
    border: 0;
-   padding: 0.5rem 1rem;
+   padding: 0.75rem 1.5rem;
    border-radius: 20px;
    outline: none;
    flex: 1;
    transition: box-shadow 0.2s ease-in;
+   font-size: 0.875rem;
 }
 
 input.product-search:hover,
 input.product-search:focus{
    box-shadow: 0 0 5px 2px var(--prim-4);
+}
+
+input.product-search.show{   
+   border-radius: 20px 20px 0 0;   
+}
+
+ul.product-search-select-items{
+   display: none;
+   flex-direction: column;
+   position: absolute;
+   background-color: #fff;
+   padding: 1rem 0;
+   border-radius: 0 0 20px 20px;
+   z-index: 999;
+   top: 100%;
+   width: 100%;
+   box-sizing: border-box;
+   box-shadow: 0 3px 2px 1px rgba(0,0,0, 0.25);
+}
+
+ul.product-search-select-items.show{
+   display: flex;
+}
+
+ul.product-search-select-items::before{
+   content: " ";
+   position: relative;
+   height: 1px;
+   width: 100%;
+   left: 0;
+   top: -12px;
+   background-color: #f0f0f0;
+}
+
+li.product-search-item{
+   padding: 0.5rem 1.5rem;
+   font-size: 0.875rem;
+   background-color: #fff;
+   cursor: default;
+}
+
+li.product-search-item:hover{
+   background-color: #f6f6f6;
+}
+
+li.product-search-item.selected{
+   background-color: #f0f0f0;
+}
+
+
+
+button.btn-clear-input{
+   position: absolute;
+   right: 12px;
+   top: 50%;
+   transform: translateY(-50%);
+   display: none;
+   align-items: center;
+   justify-content: center;
+   border: 0;
+   outline: none;
+   background-color: transparent;
+   cursor: pointer;
+}
+
+button.btn-clear-input.show{
+   display: flex;
 }
 
 header.parent-app-header{
@@ -103,6 +171,8 @@ div.overlay-header-menu.show{
    opacity: 0.7;
    visibility: visible;
 }
+
+
 
 section.hidden-header-menu{
    min-height: 300px;   
@@ -208,8 +278,19 @@ div.compact-menu-content{
 }
 
 div.compact-menu-content.show{
-   transform: translateX(0%);   
-   
+   transform: translateX(0%);      
+}
+
+section.header-small-search{
+   display: none;
+   background-color: var(--prim);
+   padding: 1rem;
+   flex-direction: row;
+   gap: 1rem;
+}
+
+section.header-small-search.show{
+   display: flex;   
 }
 
 div.compact-menu-overlay{
@@ -262,6 +343,13 @@ ul.cart-header-list > li{
 @media only screen and (max-width: 768px)  {
    div.app-header-compact {
       display: block;
+   }
+
+   div.app-header-compact.sticky{
+      position: fixed;
+      top: 0;
+      z-index: 990;
+      opacity: 0.8;
    }
 
    div.app-header-full{

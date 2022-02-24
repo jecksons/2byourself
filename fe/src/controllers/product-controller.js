@@ -15,6 +15,10 @@ export default class ProductController {
       return api.get(`/products/filters/?${activeFilters}`)      
    }
 
+   static getProductTextSearchOptions(searchText) {
+      return api.get(`/products/search-text-options/?limit=15&searchtext=${searchText}`)            
+   }   
+
    static getProductFiltersUri(genre, category, brand) {      
       const filters = [];
       if (genre) {
@@ -35,6 +39,14 @@ export default class ProductController {
 
    static getProductUri(productId, description, brandName) {
       return `/products/${productId}/?product=${brandName.replaceAll(' ', '_')}-${description.replaceAll(' ', '_')}`;
+   }
+
+   static getProductFilterUri(filter, id, description) {
+      return `/products/?${filter}=${id}-${description}`;
+   }
+
+   static getProductSearchTextUri(searchText) {
+      return `/products/?searchtext=${searchText}`;
    }
 
 }

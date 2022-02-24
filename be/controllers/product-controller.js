@@ -15,6 +15,8 @@ const SQL_SEL_OFFERS = `
                      count(1)
                   from
                      product prd
+                  join product_category ppc on (prd.id_product_category = ppc.id_product_category)
+                  join brand pbr on (prd.id_brand = pbr.id_brand)                     
                   where
                      prd.id_offer = ofe.id_offer
                      /*prdfilter*/
@@ -44,6 +46,8 @@ const SQL_SEL_CATEGORIES = `
                      count(1)
                   from
                      product prd
+                  join product_category ppc on (prd.id_product_category = ppc.id_product_category)
+                  join brand pbr on (prd.id_brand = pbr.id_brand)                                          
                   where
                      prd.id_product_category = cat.id_product_category
                      /*prdfilter*/
@@ -73,6 +77,8 @@ const SQL_SEL_BRANDS = `
                      count(1)
                   from
                      product prd
+                  join product_category ppc on (prd.id_product_category = ppc.id_product_category)
+                  join brand pbr on (prd.id_brand = pbr.id_brand)                                          
                   where
                      prd.id_brand = brd.id_brand
                      /*prdfilter*/
@@ -104,6 +110,8 @@ const SQL_SEL_SIZES = `
                   from 
                      product_category_size cats
                   join product prd on (prd.id_product_category = cats.id_product_category)
+                  join product_category ppc on (prd.id_product_category = ppc.id_product_category)
+                  join brand pbr on (prd.id_brand = pbr.id_brand)                                       
                   where
                      cats.id_size = siz.id_size
                      /*prdfilter*/
@@ -128,6 +136,8 @@ const SQL_SEL_PRICE_RANGE = `
          ifnull(max(prd.price), 0) max_value
       from
          product prd
+      join product_category ppc on (prd.id_product_category = ppc.id_product_category)
+      join brand pbr on (prd.id_brand = pbr.id_brand)                              
       where
          1 = 1
          /*prdfilter*/
@@ -264,7 +274,7 @@ const PRODUCT_FILTERS = [
       fieldFilter: FINAL_PRICE_EXPR,
       description: 'Price',
       sql: SQL_SEL_PRICE_RANGE
-   }
+   }   
 ]
 
 const PRODUCT_SORT_OPTIONS = [
@@ -294,7 +304,7 @@ const SQL_SEL_PRODUCTS = `
                prd.user_rating,
                prd.id_image,
                ofe.description offer,
-               brd.description brand,
+               pbr.description brand,
                ofe.discount,
                row_number() over(order by 
                   /*sort_by*/
@@ -305,7 +315,8 @@ const SQL_SEL_PRODUCTS = `
             from
                product prd
             left join offer ofe on (prd.id_offer = ofe.id_offer)
-            left join brand brd on (prd.id_brand = brd.id_brand)
+            join product_category ppc on (prd.id_product_category = ppc.id_product_category)
+            join brand pbr on (prd.id_brand = pbr.id_brand)                              
             where
                1=1
                /*filter*/
@@ -392,6 +403,97 @@ const SQL_SEL_PRODUCT_RATING = `
          rat.rating
 `
 
+const SQL_SEL_SEARCH_PRODUCTS = `
+      with
+         brd as
+         (
+            select
+               fil.id_brand id,
+               fil.description,
+               'brand' filter_type
+            from
+               brand fil
+            where
+               1=1
+               /*word_filters*/
+         ),
+         cat as
+         (   
+            select
+               fil.id_product_category id,
+               fil.description,
+               'category' filter_type
+            from
+               product_category fil
+            where
+               1=1
+               /*word_filters*/         
+         ),
+         prd as
+         (
+            select
+               fil.id_product id,
+               fil.description,
+               'product' filter_type
+            from
+               product fil
+            where
+               1=1
+               /*word_filters*/
+         ),
+         itm as
+         (
+            select
+               cat.id,
+               cat.description,
+               cat.filter_type,
+               1 appearance_order
+            from
+               cat
+            union all
+            select
+               brd.id,
+               brd.description,
+               brd.filter_type,
+               2 appearance_order
+            from
+               brd
+            union all
+            select
+               prd.id,
+               prd.description,
+               prd.filter_type,
+               3 appearance_order
+            from
+               prd
+         ),
+         agp as
+         (
+            select
+               itm.*,
+               row_number() over(order by 
+                  case
+                     when upper(itm.description) like upper(concat(?, '%')) then 1
+                     when upper(itm.description) like upper(concat('%', ?, '%')) then 2
+                     else 3
+                  end,
+                  itm.appearance_order,
+                  itm.description
+               ) rn_items,
+               count(1) over() count_items
+            from
+               itm
+         )
+      select
+         agp.*
+      from
+         agp
+      where
+         agp.rn_items between ? and ?
+      order by
+         agp.rn_items
+   `;
+
 class ProductController {
 
    static async addFilterNT(arFilters, productItemFilter, conn, filters = ' ', filterValues = []) {
@@ -414,6 +516,58 @@ class ProductController {
             });
          }         
       }     
+   }
+
+   static processFilterFromPhrase(text, sqlValues) {
+      const queryWords = text.replaceAll('  ', ' ').split(' ');
+      let filterRet = ' ';
+      queryWords.forEach((itm) => {
+         filterRet += ` and upper(concat(prd.description, ppc.description, pbr.description)) like upper(concat('%', ?, '%')) `;
+         sqlValues.push(itm);
+      });
+      return filterRet;
+   }
+
+   static async getProductsOptionsByText(query, conn) {
+      try {
+         const metadata = {
+            total: 0,
+            count: 0,
+            offset: parseInt(query.offset) > 0 ? parseInt(query.offset) : 0,
+            limit: parseInt(query.limit) > 0 ? parseInt(query.limit) : 20
+         };
+         let sqlFilter = '';
+         let sql = SQL_SEL_SEARCH_PRODUCTS;
+         const queryText = query.searchtext || '';
+         const queryWords = queryText.split(' ');         
+         let values = [];         
+         queryWords.forEach((itm, idx) => {
+            sqlFilter += ` and upper(fil.description) like upper(concat('%', ?, '%')) `;
+            values.push(itm);
+         });
+         if (values.length > 0) {
+            values = [...values, ...values, ...values];
+            sql = sql.replaceAll('/*word_filters*/', sqlFilter);
+         }
+         values.push(queryText, queryText, metadata.offset +1, metadata.offset + metadata.limit);
+         const rows = await conn.query(sql, values);
+         let results = [];
+         if (rows.length > 0) {
+            metadata.total = rows[0].count_items;
+            metadata.count = rows.length;
+            results = rows.map((itm) => ({
+               id: itm.id,
+               description: itm.description,
+               filter_type: itm.filter_type               
+            }));
+         }
+         return {
+            metadata,
+            results            
+         };
+      } finally {
+         await conn.close();
+      }
    }
 
    static async getProductFilters(query, conn) {
@@ -468,7 +622,9 @@ class ProductController {
                   values = values.concat(fltVals);
                }
             }
-         }         
+         } else if (fieldKey === 'searchtext') {
+            filter += ProductController.processFilterFromPhrase(query[fieldKey], values);
+         }
       }
       if (query.id) {
          const idVals = query.id.split(',');
@@ -827,7 +983,12 @@ class ProductController {
       .then((ret) => res.status(200).json(ret))
       .catch((err) => UtilsLib.resError(err, res));
       
+   }
 
+   static getProductsOptionsByTextReq(req, res, conn) {
+      ProductController.getProductsOptionsByText(req.query, conn)
+      .then((ret) => res.status(200).json(ret))
+      .catch((err) => UtilsLib.resError(err, res));
    }
 
 }

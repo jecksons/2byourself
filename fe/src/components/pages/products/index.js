@@ -152,7 +152,8 @@ const ProductQueryFilters = [
    'brand',   
    'offer',
    'size',
-   'offset'
+   'offset',
+   'searchtext'
 ]
 
 const getProductsTitle = (filters, separator = ' - ') => {
@@ -167,6 +168,9 @@ const getProductsTitle = (filters, separator = ' - ') => {
          }         
       }
    });
+   if (strRes === '') {
+      strRes = 'Men & Women Clothing';
+   }
    return strRes;
 }
 
@@ -187,6 +191,12 @@ const processFiltersFromParams = (searchParams) => {
                ret.push({
                   id: parseInt(valAdd.substr(0, valAdd.indexOf('-'))) || valAdd.substr(0, valAdd.indexOf('-')),
                   description: valAdd.substr(valAdd.indexOf('-')+1),
+                  filter: key
+               });
+            } else if (key === 'searchtext') {
+               ret.push({
+                  id: valAdd,
+                  description: valAdd,
                   filter: key
                });
             }
@@ -265,6 +275,16 @@ function handleSelectedFilters(state, action) {
       }
       default: throw new Error('Action not expected')
    }
+}
+
+function ProductNotFound(props) {
+
+   return (
+      <div className="no-products-found">
+         <NotFoundSurface  title="No products found" message="Try to searching for something else" />
+      </div>
+   )
+
 }
 
 export default function Products(props){
@@ -371,17 +391,23 @@ export default function Products(props){
                   onChangeSelection={onChangeFilters} 
                   onDismiss={onDismissFilter}
                   selFilters={selFilters}  />
-               <ul className="product-items">
-                  {
-                     productLoad === PL_LOADING ? 
-                        ( Array.from('123').map((itm) => <ProductCardLoading key={itm} /> )) :
-                        (
-                           productLoad === PL_ERROR ? 
-                              <NotFoundSurface title={errorMessage.title}  message={errorMessage.message} /> :
-                              products.map((itm) => <ProductCard key={itm.id} product={itm} /> ) 
-                        )
-                  }                             
-               </ul>
+               {
+                  (productLoad === PL_LOADED && products.length === 0) ?
+                     <ProductNotFound /> : 
+                     (
+                        <ul className="product-items">
+                           {
+                              productLoad === PL_LOADING ? 
+                                 ( Array.from('123').map((itm) => <ProductCardLoading key={itm} /> )) :
+                                 (
+                                    productLoad === PL_ERROR ? 
+                                       <NotFoundSurface title={errorMessage.title}  message={errorMessage.message} /> :
+                                       products.map((itm) => <ProductCard key={itm.id} product={itm} /> )
+                                 )
+                           }                             
+                        </ul>
+                     )
+               }
                <footer className="row just-end" >
                   <PageTrack pageSize={ProdPageSize} rowOffset={prodOffset} onSelectOffset={onChangeOffset} rowTotal={prodMetadata.total} />                  
                </footer>
