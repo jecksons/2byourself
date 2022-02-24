@@ -22,7 +22,7 @@ export function useCurrUser() {
 
 function getSessionStorageValue(key, defaultValue, isDate) {
    let strItem = sessionStorage.getItem(key);
-   if (strItem) {      
+   if (typeof strItem !== 'undefined' && strItem) {      
       if (isDate) {
          strItem = strItem.replaceAll('"', '');
          return new Date(strItem);
@@ -46,7 +46,7 @@ export function useSessionStorage(key, defaultValue, isDate) {
 
 function getLocalStorageValue(key, defaultValue, isDate) {
    let strItem = localStorage.getItem(key);
-   if (strItem) {      
+   if (typeof strItem !== 'undefined' && strItem) {      
       if (isDate) {
          strItem = strItem.replaceAll('"', '');
          return new Date(strItem);
