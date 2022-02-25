@@ -300,7 +300,8 @@ class CartController {
             discount: itm.offer_discount,
             brand: itm.brand,
             total_value: itm.total_value,
-            image: `/products/img/${itm.id_image}.png`,
+            image: `/products/img/${itm.id_image}.webp`,
+            imageSmall: `/products/img/small/${itm.id_image}.webp`,
          }));
          return ret;            
       }

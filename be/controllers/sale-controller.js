@@ -394,13 +394,13 @@ class SaleController {
                   image_sample: []
                }
                if (itm.image_1) {
-                  itmRet.image_sample.push(`/products/img/${itm.image_1}.png`);
+                  itmRet.image_sample.push(`/products/img/small/${itm.image_1}.webp`);
                }
                if (itm.image_2) {
-                  itmRet.image_sample.push(`/products/img/${itm.image_2}.png`);
+                  itmRet.image_sample.push(`/products/img/small/${itm.image_2}.webp`);
                }
                if (itm.image_3) {
-                  itmRet.image_sample.push(`/products/img/${itm.image_3}.png`);
+                  itmRet.image_sample.push(`/products/img/small/${itm.image_3}.webp`);
                }
                return itmRet;
             });
