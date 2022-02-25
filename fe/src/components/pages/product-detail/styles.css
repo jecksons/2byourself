@@ -77,6 +77,7 @@ button.btn-size-option-selected{
 
 figure.img-product-zoom{
    width: 400px;
+   height: 400px;
 }
 
 button.btn-size-option-selected{
@@ -135,6 +136,7 @@ ol.last-visited-list{
 
    figure.img-product-zoom{
       width: 300px;
+      height: 300px;
    }
 
 }
@@ -143,6 +145,7 @@ ol.last-visited-list{
 
    figure.img-product-zoom{
       width: 200px;      
+      height: 200px;
    }
 
    .main-content-width{
