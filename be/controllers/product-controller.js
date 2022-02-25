@@ -393,7 +393,7 @@ const SQL_SEL_PRODUCT_RATING = `
       select 
          rat.rating, 
          rat.review_count,
-         round((sum( rat.review_count *  rat.rating ) over())  / (sum( rat.review_count) over()), 1) perc,
+         ifnull(round((sum( rat.review_count *  rat.rating ) over())  / (sum( rat.review_count) over()), 1), 0) perc,
          (sum( rat.review_count) over()) review_total
       from 
          product_rating rat
@@ -656,7 +656,9 @@ class ProductController {
             const dist = ret.distribuition.find((di) => di.rating === itm.rating);
             if (dist) {
                dist.total = itm.review_count;
-               dist.ratio = UtilsLib.roundTo(itm.review_count / rows[0].review_total, 3);
+               if (rows[0].review_total > 0) {
+                  dist.ratio = UtilsLib.roundTo(itm.review_count / rows[0].review_total, 3);
+               }               
             }
          })
       }
