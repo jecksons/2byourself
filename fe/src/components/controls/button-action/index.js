@@ -14,7 +14,7 @@ function ButtonActionPrimary(props) {
       onClick={processing || props.disabled ? null: props.onClick}>
       {
          processing ? 
-            <SurfaceLoading height={36} width={36} onBackground={true} loadType="bars" /> : 
+            <SurfaceLoading height={40} width={40} onBackground={true} loadType="bars" /> : 
             props.caption}
  </button>
 }

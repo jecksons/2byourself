@@ -1,4 +1,23 @@
 
+div.parent-cart{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: flex-start;
+    gap: 1rem;
+    padding: 1.5rem;
+    min-width: 62.5rem;
+    box-sizing: border-box;
+}
+
+@media only screen and (max-width: 1000px) {
+
+    div.parent-cart{
+        min-width: calc(100vw - 0.5rem);
+    }
+
+}
+
 
 @media only screen and (max-width: 600px) {
     li.card-cart-item{

@@ -315,6 +315,11 @@ export default function Products(props){
             setProducts(ret.data.results);
             setProdMetadata(ret.data.metadata);            
             setProductLoad(PL_LOADED);
+            document.documentElement.scrollTo({
+               left: 0,
+               top: 0,
+               behavior: 'smooth'
+            });
          } catch (err) {
             if (!api.isCancel(err)) {
                setErrorMessage({title: 'Something went wrong.', message: utils.getHTTPError(err)})
@@ -364,11 +369,12 @@ export default function Products(props){
       }
    }, [onChangeFilters])
 
+
    return (
       <AppMainContainer>
          <section className="body-product">
             <section className="card-square width-12 col-1 align-start just-start product-filter-main">
-               <label className="font-bold">Filter By</label>
+               <label className="font-bold font-87 color-grey">Filter By</label>
                {
                   selFilters.length > 0 &&
                      <div className="col-05 width-100">
@@ -398,7 +404,7 @@ export default function Products(props){
                         <ul className="product-items">
                            {
                               productLoad === PL_LOADING ? 
-                                 ( Array.from('123').map((itm) => <ProductCardLoading key={itm} /> )) :
+                                 ( Array.from('1'.padStart(ProdPageSize, '1')).map((itm, idx) => <ProductCardLoading key={idx} /> )) :
                                  (
                                     productLoad === PL_ERROR ? 
                                        <NotFoundSurface title={errorMessage.title}  message={errorMessage.message} /> :

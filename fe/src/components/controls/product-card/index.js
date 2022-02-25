@@ -11,11 +11,11 @@ function ProductCard({product}) {
       <div className="flex-1 width-100">
          <div className="col just-center pos-relative width-100">
             {(product.discount > 0) && <label className="discount-perc">{product.discount.toFixed(0)}% Off</label>}
-            <img src={`${api.defaults.baseURL}${product.image}`} alt='product'  className='product-card-img' />
+            <img src={`${api.defaults.baseURL}${product.imageSmall}`} alt='product'  className='product-card-img' />
          </div>
       </div>
       <div className="col-05 align-start width-100" >
-         <label className="font-75 font-bold" >{product.brand}</label>      
+         <label className="font-75 font-bold color-grey" >{product.brand}</label>      
          <label className="font-75">{product.description}</label>      
          <div className="row-1 just-center width-100">
             {product.final_price !== product.original_price && <label className="font-75 font-strike">USD {product.original_price.toFixed(2)}</label>      } 

@@ -1,4 +1,4 @@
-import {useParams} from 'react-router-dom';
+import {useParams, useSearchParams} from 'react-router-dom';
 import { useCallback, useEffect, useState, useRef, useContext } from "react";
 import api from "../../../services/api";
 import utils from "../../../services/utils";
@@ -37,7 +37,7 @@ function BagAddedNotification(){
    </div>
 }
 
-function ProductImage({imgUrl}) {
+function ProductImage({imgUrl, imgUrlSmall}) {
    const [selImg, setSelImg] = useState(0);
 //style={{minHeight: 400}}
 //
@@ -53,13 +53,13 @@ function ProductImage({imgUrl}) {
          <div 
             onClick={() => setSelImg(0)}
             className={`parent-img-product-small ${selImg === 0 ? 'img-selected' : '' }`}>
-            <img src={`${api.defaults.baseURL}${imgUrl}`} alt="product small 1" />
+            <img src={`${api.defaults.baseURL}${imgUrlSmall}`} alt="product small 1" />
          </div>
          <div 
             className={`parent-img-product-small ${selImg === 1 ? 'img-selected' : '' } `}
             onClick={() => setSelImg(1)}
             >
-            <img className="img-flip" src={`${api.defaults.baseURL}${imgUrl}`} alt="product small 2" />
+            <img className="img-flip" src={`${api.defaults.baseURL}${imgUrlSmall}`} alt="product small 2" />
          </div>
       </div>
    </div>
@@ -244,7 +244,13 @@ export default function ProductDetail(props) {
    const [productData, setProductData] = useState(null);
    const [selectedSize, setSelectedSize] = useState(null);
    const [quantityAdd, setQuantityAdd] = useState(1);
-   const [lastProdIds, setLastProdIds] = useLocalStorage('last-products', []);
+   const [lastProdIds, setLastProdIds] = useLocalStorage('last-products', []);   
+   const [searchParams] = useSearchParams();
+
+   useEffect(() => {
+      const prodInfo = (searchParams.get('product') || 'Product').replace(/_/g, ' ');
+      document.title = '2BYourself - ' + prodInfo;
+   }, [searchParams]);
    
    
    useEffect(() => {
@@ -281,16 +287,16 @@ export default function ProductDetail(props) {
             (
                loadingProduct === LS_LOADED ?               
                   <section className='product-parent-info'> 
-                     <div className="row-1 just-start width-100">
+                     <div className="row-05 just-start width-100">
                         <a className='link underline-hover' href={ProductController.getProductFiltersUri(productData.genre)} >{productData.genre.description}  </a>
-                        <label>-</label>
+                        <label className='font-75'>></label>
                         <a className='link underline-hover' href={ProductController.getProductFiltersUri(productData.genre, productData.category)} >{productData.category.description}  </a>
-                        <label>-</label>
+                        <label className='font-75'>></label>
                         <a className='link underline-hover' href={ProductController.getProductFiltersUri(productData.genre, productData.category, productData.brand)} >{productData.brand.description}  </a>                        
                      </div>
                      <section className="card-item main-content-width">                     
                         <div className="row-05 align-start flex-wrap">
-                           <ProductImage  imgUrl={productData.image} />                           
+                           <ProductImage  imgUrl={productData.image} imgUrlSmall={productData.imageSmall} />                           
                            <div className="product-main-info">
                               <div className="col-05 align-start">
                                  <a className='no-decoration color-grey font-bold underline-hover' href={ProductController.getProductFiltersUri(null, null, productData.brand)}>{productData.brand.description}</a>
