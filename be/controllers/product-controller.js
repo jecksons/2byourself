@@ -704,7 +704,8 @@ class ProductController {
                id: prd[0].id_product_category,
                description: prd[0].category
             },
-            image: `/products/img/${prd[0].id_image}.png`,
+            image: `/products/img/${prd[0].id_image}.webp`,
+            imageSmall: `/products/img/small/${prd[0].id_image}.webp`,
             sizes: []
          };
          prd.forEach((itm) => {
@@ -737,7 +738,8 @@ class ProductController {
          user_rating: row.user_rating,
          offer: row.offer,
          brand: row.brand,
-         image: `/products/img/${row.id_image}.png`
+         image: `/products/img/${row.id_image}.webp`,
+         imageSmall: `/products/img/small/${row.id_image}.webp`
       };
    }
    
