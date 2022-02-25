@@ -63,6 +63,10 @@ export default function MyOrders(props) {
    const [loadState, setLoadState] = useState({state: LS_LOADING, errorMessage: ''});
    const [searchData, setSearchData] = useState(null);
    const [ordersOffset, setOrdersOffset] = useState(0);
+
+   useEffect(() => {
+      document.title = '2BYourself - My Orders';
+   }, []);
    
    useEffect(() => {
       setLoadState( p => ({...p, state: LS_LOADING}));
@@ -72,7 +76,11 @@ export default function MyOrders(props) {
             const ret = await SaleController.getSales(ordersOffset, OrdersPageSize);
             setSearchData(ret.data)
             setLoadState({state: LS_LOADED, errorMessage: ''});
-            
+            document.documentElement.scrollTo({
+               left: 0,
+               top: 0,
+               behavior: 'smooth'
+            });            
          } catch (err) {
             if (!api.isCancel(err)) {               
                setLoadState({state: LS_ERROR, errorMessage: utils.getHTTPError(err)});              
@@ -85,7 +93,7 @@ export default function MyOrders(props) {
 
    return <AppMainContainer>
       <div className="col-1 my-orders-parent">
-         <header className="row-05   width-100 border-bottom-grey pad-1-0 color-prim-4 flex-wrap ">
+         <header className="row-05   width-100 border-bottom-grey pad-1-0 color-prim-4 flex-wrap  ">
             <h1 className="color-prim-4" >My Orders</h1>            
             <div className="parent-pagetrack-my-orders">
                {(searchData && searchData.results.length > 0) && 

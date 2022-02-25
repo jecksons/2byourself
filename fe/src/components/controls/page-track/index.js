@@ -14,8 +14,7 @@ function PageTrack({pageSize, rowTotal, rowOffset, onSelectOffset}) {
       prevPage: null
    });
    const [keyRender, setKeyRender] = useState(0);
-      
-   
+         
    useEffect(() => {
       if (rowTotal > 0 && pageSize > 0) {         
          let numPages = Math.trunc(rowTotal / pageSize);

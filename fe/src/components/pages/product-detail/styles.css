@@ -156,6 +156,7 @@ ol.last-visited-list{
 
    section.product-parent-info{
       padding: 1rem;
+      gap: 1rem;
    }
 
    ol.last-visited-list{

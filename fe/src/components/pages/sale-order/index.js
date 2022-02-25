@@ -42,7 +42,7 @@ function TimelineItem({item}) {
    return (
       <li className='min-width-7 row just-center'>
          <div className='timeline-sale-item-normal'>
-            <img  alt='sale status' src={item.statusObj.getImg()} style={{maxWidth: 32, maxHeight: 32}} />               
+            <img  alt='sale status' src={item.statusObj.getImg()} style={{maxWidth: 32, maxHeight: 32, minHeight: 32}} />               
             <div className={`timeline-circle-grey${item.event_date ? '-tick' : ''}`}>
                {
                   item.event_date ?
@@ -98,11 +98,11 @@ function OrderItems({items}) {
          <ol className='col pad-0-1-1 align-start width-100-1'>
             {items.map((itm) => <li key={itm.id} className='row-1 width-100 just-start align-start border-bottom-grey-2 pad-1-0'>
                <div className='container-img-cart-item'>
-                  <img alt='product' src={`${api.defaults.baseURL}${itm.image}`} style={{maxWidth: 72, maxHeight: 72}}/>
+                  <img alt='product' src={`${api.defaults.baseURL}${itm.imageSmall}`} style={{maxWidth: 72, maxHeight: 72}}/>
                </div>
                <div className='col-05 align-start just-start'>
                   <label className='font-75 color-grey font-bold'>{itm.brand}</label>
-                  <a className='btn-link font-87' href={ProductController.getProductUri(itm.id_product, itm.description, itm.brand )}  >{itm.description}</a>
+                  <a target='_blank' rel='noreferrer' className='btn-link font-87' href={ProductController.getProductUri(itm.id_product, itm.description, itm.brand )}  >{itm.description}</a>
                   <div className='row-1'>
                      <label className='font-75'>Size: {itm.size}</label>
                      <label className='font-75'> Quantity: {itm.quantity}</label>
@@ -129,19 +129,19 @@ function OrderDetails({orderData}) {
          <div className='col-05 width-100-1 pad-0-1 '>
             <div className='row-1 width-100'>
                <label className='font-87'>Payment Method:</label>
-               <label className='font-bold font-87'>{orderData.payment_method}</label>
+               <label className='font-87'>{orderData.payment_method}</label>
             </div>
             <div className='row-1 width-100'>
                <label className='font-87'>Subtotal:</label>
-               <label className='font-bold font-87'>{orderData.items_value.toFixed(2)}</label>
+               <label className='font-87'>{orderData.items_value.toFixed(2)}</label>
             </div>
             <div className='row-1 width-100'>
                <label className='font-87'>Discount:</label>
-               <label className='font-bold font-87'>{(orderData.discount_code_value + orderData.offer_discount_value).toFixed(2)}</label>
+               <label className=' font-87'>{(orderData.discount_code_value + orderData.offer_discount_value).toFixed(2)}</label>
             </div>
             <div className='row-1 width-100'>
                <label className='font-87'>Shipping:</label>
-               <label className='font-bold font-87'>{orderData.freight_value.toFixed(2)}</label>
+               <label className='font-87'>{orderData.freight_value.toFixed(2)}</label>
             </div>
          </div>
          <div className='row-1 pad-1 width-100-1 back-grey-2 border-radius-6-bottom'>
@@ -178,10 +178,10 @@ function SaleOrderInfo(props) {
 export default function SaleOrder(props) {
 
    const {orderId} = useParams();
-   const [loadState, setLoadState] = useState({state: LS_LOADING, errorMessage: '', orderData: null});
-   
+   const [loadState, setLoadState] = useState({state: LS_LOADING, errorMessage: '', orderData: null});      
 
    useEffect(() => {
+      document.title = '2BYourself - Order ' + orderId;
       const cancelToken = api.getCancelToken();
       const fetchOrder = async () => {
          try {
@@ -204,7 +204,7 @@ export default function SaleOrder(props) {
 
    return (
       <AppMainContainer>
-         <section className="col flex-1 just-start gap-105 pad-105 parent-sale-order" >               
+         <section className="col flex-1 just-start gap-105 pad-105 border-box parent-sale-order" >               
             <header className="row-05   width-100 border-bottom-grey pad-1-0 color-prim-4 ">
                <h1 className="color-prim-4" >Order {orderId}</h1>            
             </header>

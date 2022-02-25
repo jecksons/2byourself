@@ -12,6 +12,7 @@ import './styles.css';
 import {ErrorToast} from "../../controls/toast";
 import AppMainContainer from "../../controls/app-main-container";
 import ProductController from "../../../controllers/product-controller";
+import { useNavigate } from "react-router-dom";
 
 const SS_LOADING = 0;
 const SS_LOADED = 1;
@@ -39,14 +40,12 @@ export function CartItemEditable({item, onUpdateAction, showAsCard = true}) {
       setUpdateState(p => ({...p, remove: true}));
       onUpdateAction({type: 'remove', id: item.id}, onChangeRejected);
    }, [onUpdateAction, item.id, onChangeRejected]);
-   
-   
-
+      
    return (
       <li className={`row-1 align-start ${showAsCard ? 'card-square' : ''} width-100 border-box card-cart-item`}>
          <div className="row-1 just-start">
             <div className="container-img-cart-item">
-               <img src={`${api.defaults.baseURL}${item.image}`} style={{maxWidth: 72, maxHeight: 72}} alt={item.description} />      
+               <img src={`${api.defaults.baseURL}${item.imageSmall}`} style={{maxWidth: 72, maxHeight: 72}} alt={item.description} />      
             </div>         
             <div className="col-05 align-start min-width-8 ">
                <label className="font-bold font-75 color-grey">{item.brand}</label>
@@ -75,7 +74,7 @@ export function CartItemEditable({item, onUpdateAction, showAsCard = true}) {
                </div>            
             </div>
             <div className="col-05 align-end">
-               <label className="font-bold">Total</label>
+               <label className="font-bold font-75 color-grey">Total</label>
                <div className="row min-width-4 align-center just-end">
                   {
                      updateState.quantity ? 
@@ -105,6 +104,19 @@ export default function Cart(props) {
    const [errorMessage, setErrorMessage] = useState(null);
    const [cartData, setCartData] = useState(null);
    const cartId = cartInfo ? cartInfo.id : null;
+   const navigate = useNavigate();
+
+   useEffect(() => {
+      document.title = '2BYourself - Cart';
+   }, []);
+
+   useEffect(() => {
+      if (cartData && screenState === SS_LOADED) {
+         if (cartData.items.length === 0) {
+            navigate('/');
+         }
+      }
+   }, [cartData, screenState, navigate]);
 
    useEffect(() => {
       if (!cartId ) {
@@ -172,7 +184,7 @@ export default function Cart(props) {
    
 
    return <AppMainContainer>
-      <div className="col flex-1 just-start gap-1 pad-105" >      
+      <div className="parent-cart" >      
          <div className="row-05  just-start width-100 border-bottom-grey pad-1-0 color-prim-4 border-box ">
             <BsHandbag size={24} />
             <h1 className="color-prim-4" >Shopping Bag</h1>            
