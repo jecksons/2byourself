@@ -8,5 +8,6 @@ module.exports = (app, handleRequestDB, express)   => {
    app.post('/sales/', [authController.verifyToken], (req, res) => handleRequestDB(req, res, controller.saveSaleReq));
    app.get('/sales/', [authController.verifyToken], (req, res) => handleRequestDB(req, res, controller.getUserOrdersReq));
    app.get('/sales/id/:id', [authController.verifyToken], (req, res) => handleRequestDB(req, res, controller.getSaleOrderReq));   
+   app.get('/sales/htmlitem', [], (req, res) => handleRequestDB(req, res, controller.getSaleHtmlReq));   
    
 }

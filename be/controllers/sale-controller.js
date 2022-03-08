@@ -8,6 +8,9 @@ const { ErBadRequest, ErNotFound, ErUnprocEntity } = require("../services/error_
 const UtilsLib = require("../services/utils_lib");
 const userController = require("./user-controller");
 const CartController = require("./cart-controller");
+const config = require('../config');
+const jsdom = require('jsdom');
+const nodemailer = require('nodemailer');
 
 const SQL_INS_SALE = `
       insert into sale_order
@@ -43,7 +46,7 @@ const SQL_SEL_ORDER = `
       select 
          sal.id_sale_order,
          sal.created_at,
-         sal.email,
+         usr.email,
          sal.items_value,
          sal.id_discount_code,
          sal.discount_code_value,
@@ -51,16 +54,19 @@ const SQL_SEL_ORDER = `
          sal.total_value,
          sal.freight_value,
          sal.id_cart,
+         sal.delivery_forecast,
          sal.id_sale_status current_status,
          pay.description payment_method,
          his.event_date,
          his.id_sale_status,
-         sta.description status_description
+         sta.description status_description,
+         usr.description username
       from 
          sale_order sal
       left join sale_order_history his on (sal.id_sale_order = his.id_sale_order)
       left join sale_status sta on (his.id_sale_status = sta.id_sale_status) 
       left join payment_method pay on (sal.id_payment_method = pay.id_payment_method)
+      left join user usr on (sal.id_user = usr.id_user)
       where
          sal.id_sale_order = ?
          and sal.id_user = ?
@@ -147,6 +153,51 @@ const SQL_SEL_USER_ORDERS = `
       order by
          agp.rn
    `;
+
+const EL_PRODUCT_ITEM = `
+      <td style="background-color: #E6E6E6;  padding: 0 24px 0 24px;  ">
+         <div style="background-color: #fff; padding: 16px 16px 0 16px; " >
+            <div style="border-bottom: 1px solid #E6E6E6; padding-bottom: 16px;">
+               <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0;   ">
+                  <tr>
+                     <td style="vertical-align: top;">
+                        <img src="xxx" class="product-item"  style="margin: 0;" alt="product" width="60px" /> 
+                     </td>
+                     <td style="padding-left: 16px; ">
+                        <div style="font-size: 12px; color: #333333; line-height: 20px; ">
+                           <div>
+                              <label class="product-description" style="font-size: 12px; font-weight: bold; color: #707070;">xxx</label>
+                           </div>
+                           <div>
+                              <label class="product-brand" >xxx</label>
+                           </div>                                                
+                           <div>
+                              <div>
+                                 <label>Size:</label>
+                                 <label class="product-size">x</label>
+                              </div>
+                              <div>
+                                 <label>Quantity:</label>
+                                 <label class="product-quantity">x</label>
+                              </div>
+                           </div>
+                           <div>
+                              <label>Price:</label>
+                              <label class="product-price">xxx</label>
+                           </div>
+                           <label class="product-value" style="font-weight: bold; line-height: 32px;">xxx</label>
+                        </div>
+                     </td>
+                  </tr>
+               </table>                                    
+            </div>                                    
+         </div>
+      </td>             
+   `;
+
+
+
+const STYLE_PRODUCT_ITEM = 'margin: 0; padding: 8px 16px; width: 100%;  list-style-type: none; display: flex; flex-direction: row; align-items: flex-start; justify-content: flex-start; box-sizing: border-box; border-bottom: 1px solid #E6E6E6; min-width: 260px;';
 
 class SaleController {
 
@@ -247,7 +298,9 @@ class SaleController {
          await conn.beginTransaction();
          await SaleController.insertSale(sale, conn);         
          await conn.commit();
-         return await SaleController.getSaleOrderNT(sale.id, sale.id_user, conn);
+         const saleData = await SaleController.getSaleOrderNT(sale.id, sale.id_user, conn);
+         SaleController.sendSaleEmail(saleData);
+         return saleData;
       } catch (err) {
          if (transStarted) {
             await conn.rollback();
@@ -257,6 +310,87 @@ class SaleController {
       finally {
          await conn.close();
       }
+   }
+
+   static async sendEmailTest(conn) {
+      try {
+         const saleData = await SaleController.getSaleOrderNT(1000125, 1, conn);
+         await SaleController.sendSaleEmail(saleData);
+      } 
+      finally {
+         await conn.close();
+      }
+   }
+
+   static async getSaleHtml(conn) {
+      try {
+         const saleData = await SaleController.getSaleOrderNT(1000125, 1, conn);
+         const htmlValue = await SaleController.getSaleHtmlNotification(saleData);
+         return htmlValue;
+      } 
+      finally {
+         await conn.close();
+      }
+   }
+
+
+   static async sendSaleEmail(saleData) {
+      if (config.email.username) {
+         try {
+            const htmlValue = await SaleController.getSaleHtmlNotification(saleData);
+            const transp = nodemailer.createTransport({
+               host: "smtp.gmail.com",
+               port: 465,
+               secure: true,
+               auth: {
+               user: config.email.username,
+               pass: config.email.password,
+               },
+            });
+            const infoMsg = await transp.sendMail({
+               from: config.email.username,
+               to: saleData.email,
+               subject: `2BYourself - Order ${saleData.id} confirmation`,
+               text: 'Plain text',
+               html: htmlValue
+            });
+         } catch (e) {
+            console.log('Error on email sending!');
+            console.log(e);
+         }         
+      }
+   }
+
+   static async getSaleHtmlNotification(saleData) {
+      const { JSDOM } = jsdom;
+      const dom = await JSDOM.fromFile('templates/email-order-table.html');
+      const doc = dom.window.document;
+      const nameWords = saleData.username.split(' ');            
+      doc.getElementById('username').textContent = nameWords.length > 0 ? nameWords[0] : saleData.username;
+      doc.getElementById('order-id').textContent = saleData.id;
+      doc.getElementById('payment-method-value').textContent = saleData.payment_method;
+      doc.getElementById('order-value').textContent =  `$${saleData.total_value.toFixed(2)}`;
+      const dtDelivery = UtilsLib.getTruncDate(new Date(saleData.delivery_forecast));
+      doc.getElementById('delivery-value').textContent =  `${(dtDelivery.getMonth()+1).toString().padStart(2, '0') + '/' + dtDelivery.getDate().toString().padStart(2, '0') + '/' + dtDelivery.getFullYear()} `;
+      doc.getElementById('order-link').href = `https://2byourself.jeckson.me/orders/${saleData.id}`;
+      const elItems = doc.getElementById('sale-items');
+      while (elItems.hasChildNodes()) {
+         elItems.removeChild(elItems.firstChild);
+      }
+      for (const idx in saleData.items) {
+         const itm = saleData.items[idx];
+         const elItem = doc.createElement('tr');
+         elItem.innerHTML = EL_PRODUCT_ITEM;
+         elItem.querySelector('label.product-description').textContent = itm.description;
+         elItem.querySelector('label.product-brand').textContent = itm.brand;
+         elItem.querySelector('label.product-size').textContent = itm.size;
+         elItem.querySelector('label.product-price').textContent = `$ ${itm.price.toFixed(2)}`;
+         elItem.querySelector('label.product-quantity').textContent = itm.quantity;
+         elItem.querySelector('label.product-value').textContent = `$ ${itm.total_value.toFixed(2)}`;                
+         elItem.querySelector('img.product-item').src = `https://2byourself.jeckson.me/api${itm.imageJPGSmall}`;         
+         elItems.appendChild(elItem);
+      }            
+      return dom.serialize();      
    }
 
    static getSaleHistoryPath(creationDate) {
@@ -335,10 +469,12 @@ class SaleController {
             total_value: rows[0].total_value,
             payment_method: rows[0].payment_method,
             id_cart: rows[0].id_cart,
+            delivery_forecast: rows[0].delivery_forecast,
             id_sale_status: rows[0].current_status,
             history: [],
             items: [],
-            finished: rows[0].current_status === SS_DELIVERED
+            finished: rows[0].current_status === SS_DELIVERED,
+            username:rows[0].username
          };
          let hstPath = SaleController.getSaleHistoryPath(sal.created_at);
          rows.forEach((itm) => {
@@ -510,6 +646,18 @@ class SaleController {
    }
 
 
+   static getSendSaleEmailReq(req, res, conn) {
+      SaleController.sendEmailTest(conn)
+      .then((ret) => res.status(200).json({message: 'foi'}))
+      .catch((err) => UtilsLib.resError(err, res));
+   }
+
+
+   static getSaleHtmlReq(req, res, conn) {
+      SaleController.getSaleHtml(conn)
+      .then((ret) => res.status(200).send(ret))
+      .catch((err) => UtilsLib.resError(err, res));
+   }
    
 
 }

@@ -302,6 +302,7 @@ class CartController {
             total_value: itm.total_value,
             image: `/products/img/${itm.id_image}.webp`,
             imageSmall: `/products/img/small/${itm.id_image}.webp`,
+            imageJPGSmall: `/products/img/small/${itm.id_image}.jpg`,
          }));
          return ret;            
       }

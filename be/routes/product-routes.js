@@ -10,7 +10,5 @@ module.exports = (app, handleRequestDB, express)   => {
    app.get('/products/', [authController.verifyClientVersion], (req, res) => handleRequestDB(req, res, controller.getProductsReq));   
    app.get('/products/id/:id', [authController.verifyClientVersion], (req, res) => handleRequestDB(req, res, controller.getProductByIdReq));   
    app.get('/products/generate-ratings/', [authController.verifyClientVersion], (req, res) => handleRequestDB(req, res, controller.generateRatingsReq) );
-   app.get('/products/search-text-options/', [authController.verifyClientVersion], (req, res) => handleRequestDB(req, res, controller.getProductsOptionsByTextReq) );
-
-   
+   app.get('/products/search-text-options/', [authController.verifyClientVersion], (req, res) => handleRequestDB(req, res, controller.getProductsOptionsByTextReq) );   
 }

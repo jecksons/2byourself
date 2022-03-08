@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+</head>
+<body style="margin: 0; padding: 24px 0; background-color: #F0F0F0; font-family: Verdana, Arial, Helvetica, sans-serif;  ">
+   <div style="background-color: #fff;  border: 1px solid #BABABA;   padding: 0;  margin: 0 auto; border-radius: 10px;  max-width: 530px;">
+      <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0;">
+         <thead >
+            <tr>
+               <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%;">
+                  <tr style="background-color: #2FC9FC; border-radius: 10px 10px 0 0;  box-shadow: 0 2px 2px 0 rgba(0,0,0, 0.25); border: 0; padding: 0; ">
+                     <td style="padding: 16px 0 16px 16px; border-radius: 10px 0 0 0; ">
+                        <a href="https://2byourself.jeckson.me" target="_blank"  >
+                           <img alt="logo" height="34px"  src="https://2byourself.jeckson.me/api/common/img/logo_transparent.png" />
+                        </a>                        
+                     </td>                  
+                     <td style="background-color: #0081AC; padding: 0; margin: 0; border: 0; border-image-width: 0; max-width: 6px; min-width: 6px; vertical-align: bottom;   overflow: hidden;  " >
+                        <img alt="arrow" width="10px" style="margin: -2px 0 -4px 0; border: 0;   "   src="https://2byourself.jeckson.me/api/common/img/arrow-email.png"  />
+                     </th>
+                     <td style="background-color: #0081AC; border-radius: 0 10px 0 0; padding: 16px; color: #fff;  text-align: left; ">                                          
+                        <div style="text-align: right;" >
+                           <label style="font-size: 12px;" >ORDER NUMBER</label>
+                           <br/>
+                           <label id="order-id"  style="font-weight: bold; font-size: 14px; margin-top: 8px;">xxx</label>
+                        </div>
+                     </td>
+                  </tr>
+               </table>                  
+            </tr>
+         </thead>
+         <tbody>
+            <tr >
+               <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%; ">
+                  <tr >
+                     <td>
+                        <p style="margin: 0; padding: 24px 24px 8px; font-size: 18px; color: #707070;">Hi, <span id="username">XXX</span>. How are you?</p>
+                     </td>
+                  </tr>
+                  <tr >
+                     <td>
+                        <p style="margin: 0; padding: 8px 24px; font-size: 16px; font-weight: bold; ">Your order was received successfully!</p>
+                     </td>
+                  </tr>
+                  <tr >
+                     <td>
+                        <p style="margin: 0; padding: 8px 24px; font-size: 14px; color: #333333; line-height: 24px; ">We are waiting the payment confirmation, and then we will start the preparation to deliver your purchase. But don’t worry, we will notify you on every step until the delivery.</p>                                       
+                     </td>
+                  </tr>
+                  <tr >
+                     <td>
+                        <div style="padding: 8px 24px;">
+                           <label>Delivery date:</label>
+                           <label id="delivery-value">01/01/2022</label>
+                       </div>                                                                                   
+                     </td>
+                  </tr>
+                  <tr >
+                     <td>
+                        <div style="padding: 8px 24px; box-sizing: border-box;">
+                           <a href="xxx" target="_blank" id="order-link"  style="text-decoration: none; font-size: 14px; padding: 8px 24px;  background-color: #2FC9FC; color: #fff; border-radius: 6px; white-space: nowrap; ">Follow my order</a>
+                        </div>
+                     </td>
+                  </tr>                     
+                  <tr >
+                     <td>
+                        <br/>
+                     </td>
+                  </tr>                     
+               </table>   
+            </tr>                  
+            <tr >
+               <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; background-color: #E6E6E6; width: 100%; ">
+                  <tr >
+                     <td style="padding: 24px 24px 8px;">
+                        <label style="margin: 0; padding: 0; font-size: 16px; color: #505050; ">Your order</label>
+                     </td>                        
+                  </tr>
+                  <tr >
+                     <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%; color: #333333">
+                        <tr>
+                           <td style="background-color: #E6E6E6;  padding: 16px 0 0 24px; ">
+                              <div style="background-color: #fff; border-radius: 10px 0 0 0; padding: 16px 0 8px 16px;">
+                                 <label style="font-size: 14px; color: #333333; " >Payment Method:</label>                                    
+                              </div>
+                           </td>
+                           <td style="background-color: #E6E6E6; padding: 16px 24px 0 0; ">
+                              <div style="background-color: #fff; border-radius: 0 10px 0 0; padding: 16px 16px 8px 0; text-align: right; ">
+                                 <label id="payment-method-value" style="font-size: 14px; color: #333333;">xxx</label>
+                              </div>                                 
+                           </td>                                 
+                        </tr>
+                        <tr>
+                           <td style="background-color: #E6E6E6; padding: 0 0 0 24px;" >
+                              <div style="background-color: #fff; padding: 0 16px 16px;   border-bottom: 1px solid #BABABA;" >
+                                 <label style="font-size: 14px; " >Total value:</label>                              
+                              </div>                                 
+                           </td>
+                           <td style="background-color: #E6E6E6; padding: 0 24px 0 0;" >
+                              <div style="background-color: #fff; padding: 0 16px 16px; text-align: right;  border-bottom: 1px solid #BABABA;">
+                                 <label id="order-value" style="font-size: 14px; font-weight: bold;">xxx</label>
+                              </div>                                 
+                           </td>
+                        </tr>
+                     </table>
+                  </tr>                     
+                  <tr >
+                     <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%;">
+                        <tr>
+                           <td style="background-color: #E6E6E6; padding: 0 24px 0 24px;" >
+                              <div style="background-color: #fff; padding: 8px 16px 0; " >
+                                 <label style="color: #707070; margin: 0 16px 16px 0;">Items</label>
+                              </div>                                 
+                           </td>                              
+                        </tr>
+                     </table>
+                  </tr>      
+                  <tr >
+                     <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%;  color: #333333;" id="sale-items" >
+                        <tr>
+                           <td style="background-color: #E6E6E6;  padding: 0 24px 0 24px;  ">
+                              <div style="background-color: #fff; padding: 16px 16px 0 16px; " >
+                                 <div style="border-bottom: 1px solid #E6E6E6; padding-bottom: 16px;">
+                                    <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0;   ">
+                                       <tr>
+                                          <td style="vertical-align: top;">
+                                             <img src="xxx"  style="margin: 0;" alt="product" width="60px" /> 
+                                          </td>
+                                          <td style="padding-left: 16px; ">
+                                             <div style="font-size: 12px; color: #333333; line-height: 20px; ">
+                                                <div>
+                                                   <label style="font-size: 12px; font-weight: bold; color: #707070;">xxx</label>
+                                                </div>
+                                                <div>
+                                                   <label>xxx</label>
+                                                </div>                                                
+                                                <div>
+                                                   <div>
+                                                      <label>Size:</label>
+                                                      <label>x</label>
+                                                   </div>
+                                                   <div>
+                                                      <label>Quantity:</label>
+                                                      <label>x</label>
+                                                   </div>
+                                                </div>
+                                                <div>
+                                                   <label>Price:</label>
+                                                   <label>xxx</label>
+                                                </div>
+                                                <label style="font-weight: bold; line-height: 32px;">xxx</label>
+                                             </div>
+                                          </td>
+                                       </tr>
+                                    </table>                                    
+                                 </div>                                    
+                              </div>
+                           </td>
+                        </tr>                                                   
+                     </table>
+                  </tr>       
+                  <tr >
+                     <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%;">
+                        <tr>
+                           <td style="background-color: #E6E6E6;  padding: 0 24px 24px 24px; ">
+                              <div style="background-color: #fff; border-radius: 0 0 10px 10px; padding: 16px 0 8px 16px;">
+                                 <label style="font-size: 14px; " > </label>                                    
+                              </div>
+                           </td>                              
+                        </tr>                           
+                     </table>
+                  </tr>                      
+               </table>      
+            </tr>                  
+         </tbody>
+         <tfoot >         
+            <tr >
+               <table style="border-collapse: collapse; border: 0; border-spacing: 0; border-image-width: 0; width: 100%;">
+                  <tr>
+                     <td style=" background-color: #707070; color: #fff; padding: 24px 24px 0 24px;  line-height: 20px; text-align: center; ">
+                        <div style="border-radius: 0 0 10px 10px; padding: 0 16px 8px 16px;">
+                           <a href="https://2byourself.jeckson.me"  style="text-decoration: none; color: #fff; margin-bottom: 16px; font-size: 16px; font-weight: bold;" target="_blank">2BYourself - You From Your Way</a>            
+                        </div>
+                     </td>                              
+                  </tr>                           
+                  <tr>
+                     <td style="background-color: #707070; color: #fff; padding: 0 24px;  line-height: 20px; text-align: center; ">
+                        <div style="border-radius: 0 0 10px 10px; padding: 8px 16px 0px;">
+                           <label  style="text-decoration: none; color: #fff; font-size: 12px;" >Developed by Jéckson Schwengber</label>
+                        </div>
+                     </td>                              
+                  </tr>                           
+                  <tr>
+                     <td style="border-radius: 0 0 10px 10px; background-color: #707070; color: #fff; padding: 0 24px 24px 24px;  line-height: 20px; text-align: center; ">
+                        <div style="border-radius: 0 0 10px 10px; padding: 0 16px 0;">
+                           <a href="https://jeckson.me"  style="text-decoration: none; color: #fff; font-size: 12px; font-weight: bold;" target="_blank">jeckson.me</a>
+                        </div>
+                     </td>                              
+                  </tr>                           
+               </table>
+            </tr>                            
+         </tfoot>
+      </table>                  
+   </div> 
+</body>
+</html>
