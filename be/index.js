@@ -30,6 +30,7 @@ require('./routes/auth-routes')(app, handleRequestDB);
 require('./routes/product-routes')(app, handleRequestDB, express);
 require('./routes/cart-routes')(app, handleRequestDB, express);
 require('./routes/sale-routes')(app, handleRequestDB, express);
+require('./routes/app-routes')(app, handleRequestDB, express);
 
 
 app.listen(config.web.port, function() {

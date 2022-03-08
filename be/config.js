@@ -1,9 +1,9 @@
-const env = process.env.NODE_ENV || 'dev';
-const DB_PORT = process.env.DB_PORT || 3306;
-const DB_USER = process.env.DB_USER || 'dev';
-const DB_PASSWORD = process.env.DB_PASSWORD || '4mFN9LC8#S$$vW4';
-const DB_HOST = process.env.DB_HOST || 'localhost';
-const DB_NAME = process.env.DB_NAME || 'jktracker';
+const env = process.env.NODE_ENV;
+const DB_PORT = process.env.DB_PORT;
+const DB_USER = process.env.DB_USER;
+const DB_PASSWORD = process.env.DB_PASSWORD;
+const DB_HOST = process.env.DB_HOST;
+const DB_NAME = process.env.DB_NAME;
 
 const config = {
     connectionLimit: 100,
@@ -14,7 +14,11 @@ const config = {
     database: DB_NAME,
     env: env,
     web: {},
-    host: DB_HOST
+    host: DB_HOST,
+    email: {
+        username: process.env.EMAIL_USER,
+        password: process.env.EMAIL_PASSWORD
+    }
 };
 
 
