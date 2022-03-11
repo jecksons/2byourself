@@ -49,7 +49,6 @@ api.interceptors.response.use(
                 TokenService.deleteLocalUser();                
                 window.location.reload();
             } else if (err.response.status === 426) {
-                createBrowserHistory().push('/');
                 window.location.reload(true);                
             }
         }
