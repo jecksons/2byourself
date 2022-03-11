@@ -161,7 +161,8 @@ div.overlay-header-menu{
    top: 40px;
    z-index: 99;
    bottom: 0;
-   width: calc(100vw - 1rem - 1px);      
+   box-sizing: border-box;
+   width: calc(100vw - 0.5rem);
    display: flex;
    flex: 1;
    transition: opacity 0.3s ease-in;
@@ -180,7 +181,8 @@ section.hidden-header-menu{
    position: absolute;
    top: 40px;
    z-index: 100;
-   width: calc(100vw - 3rem - 1px);
+   box-sizing: border-box;
+   width: calc(100vw - 0.5rem);
    display: flex;
    visibility: hidden;
    opacity: 0;
